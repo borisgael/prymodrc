@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRYMO DRC — Agrégateur de paiements agréé BCC</title>
+<meta name="description" content="PRYMO DR Congo : agrégateur de paiements électroniques agréé par la Banque Centrale du Congo. Mobile Money, API, USSD et solutions de paiement pour les entreprises en RDC.">
+<meta name="author" content="Prymo DR Congo SARL">
+<meta name="theme-color" content="#09090F">
+<meta property="og:type" content="website">
+<meta property="og:title" content="PRYMO DRC — Agrégateur de paiements agréé BCC">
+<meta property="og:description" content="La couche de paiement unifiée de la RDC. Agréé par la Banque Centrale du Congo, interconnecté à tous les réseaux Mobile Money.">
+<meta property="og:url" content="https://prymodrc.com">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://prymodrc.com">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#09090F; --bg2:#0E0E18; --bg3:#141420; --bg0:#06060C;
+    --g:#00B87A; --g-dim:rgba(0,184,122,.12); --g-border:rgba(0,184,122,.25);
+    --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+    --dim:rgba(255,255,255,.38); --mid:rgba(255,255,255,.62); --white:#fff;
+    --cond:'Barlow Condensed',sans-serif; --body:'Barlow',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
+  body{background:var(--bg);color:var(--white);font-family:var(--body);font-weight:400;font-size:15px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+
+  /* UTILITY BAR */
+  .ut{background:var(--bg0);border-bottom:1px solid var(--line);font-size:11.5px;color:var(--dim);letter-spacing:.03em}
+  .ut .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:7px;padding-bottom:7px}
+  .ut-l{display:flex;gap:22px;flex-wrap:wrap}
+  .ut-l a{text-decoration:none;color:var(--dim)} .ut-l a:hover{color:var(--mid)}
+  .bcc-pill{display:inline-flex;align-items:center;gap:7px;background:var(--g-dim);border:1px solid var(--g-border);color:var(--g);padding:3px 11px;font-size:11px;letter-spacing:.08em;font-weight:600;text-transform:uppercase;white-space:nowrap}
+  .bcc-dot{width:5px;height:5px;border-radius:50%;background:var(--g)}
+
+  /* NAV */
+  nav{background:rgba(9,9,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
+  nav .wrap{display:flex;justify-content:space-between;align-items:center;height:66px}
+  .logo-mark{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .logo-text{font-family:var(--cond);font-size:22px;font-weight:700;letter-spacing:.06em;color:var(--white);text-transform:uppercase}
+  .logo-text span{color:var(--g)}
+  .nav-links{display:flex;gap:30px;list-style:none}
+  .nav-links a{font-size:13px;color:var(--dim);text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--white)}
+  .nav-r{display:flex;gap:10px;align-items:center}
+  .lang{display:flex;border:1px solid var(--line2)}
+  .lang button{background:transparent;border:none;color:var(--dim);font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.08em;padding:7px 11px;cursor:pointer}
+  .lang button.active{background:var(--g);color:var(--bg0)}
+  .btn-g{padding:9px 20px;background:var(--g);border:1px solid var(--g);color:var(--bg0);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--body);letter-spacing:.05em;text-transform:uppercase;text-decoration:none;display:inline-block;transition:filter .2s}
+  .btn-g:hover{filter:brightness(1.1)}
+  .burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
+  .burger span{display:block;width:22px;height:2px;background:var(--white);margin:5px 0}
+  .mobile{display:none;position:fixed;inset:0;background:var(--bg0);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:28px}
+  .mobile.open{display:flex}
+  .mobile a{font-family:var(--cond);font-size:26px;letter-spacing:.06em;text-transform:uppercase;color:var(--white);text-decoration:none}
+  .mobile .close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--white);font-size:30px;cursor:pointer}
+
+  /* HERO */
+  .hero{padding:110px 0 90px;position:relative;overflow:hidden}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,184,122,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,184,122,.025) 1px,transparent 1px);background-size:48px 48px}
+  .hero-glow{position:absolute;right:-60px;top:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(0,184,122,.1) 0%,transparent 65%);pointer-events:none}
+  .hero-inner{position:relative;z-index:1;max-width:700px}
+  .eyebrow{font-family:var(--cond);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--g);display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .eyebrow::before{content:'';width:28px;height:1px;background:var(--g);flex-shrink:0}
+  .hero h1{font-family:var(--cond);font-size:clamp(44px,6.5vw,70px);line-height:1;font-weight:700;letter-spacing:.01em;text-transform:uppercase;margin-bottom:24px}
+  .hero h1 .lo{font-weight:300;font-style:italic;text-transform:none;font-family:var(--body);font-size:.88em;letter-spacing:-.01em}
+  .hero h1 .hi{color:var(--g)}
+  .hero-sub{font-size:16.5px;font-weight:300;color:var(--mid);line-height:1.7;max-width:540px;margin-bottom:40px}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+  .btn-lg-g{padding:15px 32px;background:var(--g);border:1px solid var(--g);color:var(--bg0);font-size:13px;font-weight:700;font-family:var(--body);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:filter .2s}
+  .btn-lg-g:hover{filter:brightness(1.1)}
+  .btn-lg-o{padding:15px 32px;border:1px solid var(--line2);background:transparent;color:var(--mid);font-size:13px;font-weight:500;font-family:var(--body);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,color .2s}
+  .btn-lg-o:hover{border-color:var(--g);color:var(--white)}
+
+  /* STATS */
+  .stats{background:var(--bg0);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stats .wrap{display:grid;grid-template-columns:repeat(5,1fr);padding:0}
+  .st{padding:30px 20px;text-align:center;border-right:1px solid var(--line)}
+  .st:last-child{border-right:none}
+  .st-n{font-family:var(--cond);font-size:32px;font-weight:700;letter-spacing:.02em}
+  .st-n span{color:var(--g)}
+  .st-l{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:5px}
+
+  /* COMPLIANCE */
+  .comp{background:rgba(0,184,122,.05);border-bottom:1px solid var(--g-border)}
+  .comp .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:22px;padding-bottom:22px}
+  .comp-l{display:flex;align-items:center;gap:20px}
+  .comp-icon{width:44px;height:44px;border:1px solid var(--g-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--g)}
+  .comp-p{font-size:13.5px;color:var(--dim);line-height:1.6;max-width:520px}
+  .comp-p strong{color:var(--white);font-weight:500}
+  .comp-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .ctag{font-size:10.5px;font-weight:600;padding:4px 12px;border:1px solid var(--g-border);color:rgba(0,184,122,.85);letter-spacing:.07em;text-transform:uppercase;background:var(--g-dim);white-space:nowrap}
+
+  /* CLIENTS */
+  .clients{background:var(--bg2);padding:52px 0;border-bottom:1px solid var(--line)}
+  .cli-lbl{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:28px}
+  .logos-row{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line)}
+  .logo-c{padding:24px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid var(--line);gap:4px}
+  .logo-c:last-child{border-right:none}
+  .logo-c:hover{background:rgba(255,255,255,.03)}
+  .lc-n{font-family:var(--cond);font-size:17px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
+  .lc-s{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+
+  /* SECTIONS */
+  .sec{padding:88px 0}
+  .sec-alt{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .sec-h{font-family:var(--cond);font-size:clamp(32px,4vw,42px);font-weight:700;letter-spacing:.03em;text-transform:uppercase;line-height:1.05;margin-bottom:12px}
+  .sec-p{font-size:14.5px;font-weight:300;color:var(--dim);line-height:1.75;max-width:520px;margin-bottom:48px}
+
+  /* WHY */
+  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .wc{background:var(--bg);padding:36px 28px;transition:background .2s}
+  .wc:hover{background:var(--bg3)}
+  .wc-n{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--g);opacity:.7;margin-bottom:16px;text-transform:uppercase}
+  .wc-t{font-family:var(--cond);font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+  .wc-b{font-size:13.5px;font-weight:300;color:var(--dim);line-height:1.75}
+
+  /* SOLUTIONS */
+  .sol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .sc{background:var(--bg2);padding:28px 22px;border-bottom:2px solid transparent;transition:background .2s,border-color .2s}
+  .sc:hover{background:var(--bg3);border-bottom-color:var(--g)}
+  .sc-icon{width:38px;height:38px;border:1px solid var(--g-border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--g);background:var(--g-dim)}
+  .sc-icon svg{width:18px;height:18px}
+  .sc-t{font-family:var(--cond);font-size:16px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+  .sc-d{font-size:12.5px;font-weight:300;color:var(--dim);line-height:1.65}
+
+  /* ABOUT */
+  .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:72px;align-items:start}
+  .ab-body{font-size:14.5px;font-weight:300;color:var(--mid);line-height:1.85;margin-bottom:20px}
+  .ab-quote{border-left:2px solid var(--g);padding-left:22px;margin-top:32px}
+  .ab-quote p{font-size:16px;font-style:italic;font-weight:300;color:var(--mid);line-height:1.65}
+  .ir{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
+  .ir:first-child{padding-top:0} .ir:last-child{border-bottom:none}
+  .ik{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-top:2px}
+  .iv{font-size:13.5px;color:var(--mid);line-height:1.6}
+  .iv a{text-decoration:none} .iv a:hover{color:var(--white)}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
+  .form{border:1px solid var(--line);background:var(--bg2);padding:36px}
+  .form h3{font-family:var(--cond);font-size:22px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
+  .form-sub{font-size:12.5px;color:var(--dim);margin-bottom:24px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .fg label{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+  .fg input,.fg select,.fg textarea{background:var(--bg);border:1px solid var(--line2);color:var(--white);font-family:var(--body);font-size:14px;padding:11px 13px;outline:none;transition:border-color .2s;width:100%}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--g)}
+  .fg select option{background:var(--bg)}
+  .fg textarea{min-height:120px;resize:vertical}
+  .form .btn-lg-g{border:none;cursor:pointer;width:100%;justify-content:center;margin-top:6px}
+
+  /* FOOTER */
+  footer{background:var(--bg0);border-top:1px solid var(--line);padding:28px 0}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .fl{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .f-brand{font-family:var(--cond);font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+  .f-brand span{color:var(--g)}
+  .f-copy{font-size:12px;color:rgba(255,255,255,.25)}
+  .f-links{display:flex;gap:20px;flex-wrap:wrap}
+  .f-links a{font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.3);text-decoration:none}
+  .f-links a:hover{color:rgba(255,255,255,.6)}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  @media (max-width:1024px){
+    .stats .wrap{grid-template-columns:repeat(3,1fr)} .st:nth-child(3n){border-right:none} .st{border-bottom:1px solid var(--line)}
+    .why-grid{grid-template-columns:repeat(2,1fr)} .sol-grid{grid-template-columns:repeat(2,1fr)}
+    .logos-row{grid-template-columns:repeat(3,1fr)} .logo-c:nth-child(3n){border-right:none} .logo-c{border-bottom:1px solid var(--line)}
+    .about-grid,.contact-grid{grid-template-columns:1fr;gap:44px}
+    .comp .wrap{flex-direction:column;align-items:flex-start} .comp-tags{justify-content:flex-start}
+  }
+  @media (max-width:768px){
+    .wrap{padding:0 20px}
+    .ut{display:none}
+    .nav-links,.nav-r .btn-g{display:none} .burger{display:block}
+    .hero{padding:72px 0 60px}
+    .stats .wrap{grid-template-columns:repeat(2,1fr)} .st:nth-child(3n){border-right:1px solid var(--line)} .st:nth-child(2n){border-right:none} .st:last-child{grid-column:1/-1;border-bottom:none}
+    .why-grid,.sol-grid{grid-template-columns:1fr}
+    .logos-row{grid-template-columns:repeat(2,1fr)} .logo-c:nth-child(3n){border-right:1px solid var(--line)} .logo-c:nth-child(2n){border-right:none}
+    .row{grid-template-columns:1fr} .form{padding:24px}
+    .sec{padding:64px 0}
+    .ir{grid-template-columns:1fr;gap:4px}
+  }
+</style>
+</head>
+<body>
+
+<!-- UTILITY BAR -->
+<div class="ut"><div class="wrap">
+  <div class="ut-l">
+    <span>1 bis Avenue Lukusa, Gombe — Kinshasa, RDC</span>
+    <a href="tel:+243815459302">(+243) 815 459 302</a>
+    <a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a>
+  </div>
+  <div class="bcc-pill"><span class="bcc-dot"></span><span data-i18n="ut_pill">Agréé BCC — Agrégateur de paiements électroniques</span></div>
+</div></div>
+
+<!-- NAV -->
+<nav id="navbar"><div class="wrap">
+  <a href="#" class="logo-mark" aria-label="PRYMO DRC">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" fill="rgba(0,184,122,.1)"/><path d="M8 24V8h9a7 7 0 010 14H8" stroke="#00B87A" stroke-width="2.2" stroke-linecap="square"/><circle cx="24" cy="20" r="3" fill="#00B87A"/></svg>
+    <div class="logo-text">PRYMO<span>.</span>DRC</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about" data-i18n="nav_about">Qui nous sommes</a></li>
+    <li><a href="#solutions" data-i18n="nav_sol">Solutions</a></li>
+    <li><a href="#clients" data-i18n="nav_cli">Clients</a></li>
+    <li><a href="#why" data-i18n="nav_why">Pourquoi nous</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lang"><button class="lang-btn active" onclick="switchLang('fr')">FR</button><button class="lang-btn" onclick="switchLang('en')">EN</button></div>
+    <a href="#contact" class="btn-g" data-i18n="nav_cta">Demander une démo</a>
+    <button class="burger" aria-label="Menu" onclick="document.querySelector('.mobile').classList.add('open')"><span></span><span></span><span></span></button>
+  </div>
+</div></nav>
+<div class="mobile">
+  <button class="close" aria-label="Fermer" onclick="this.parentElement.classList.remove('open')">&#10005;</button>
+  <a href="#about" data-i18n="nav_about">Qui nous sommes</a>
+  <a href="#solutions" data-i18n="nav_sol">Solutions</a>
+  <a href="#clients" data-i18n="nav_cli">Clients</a>
+  <a href="#why" data-i18n="nav_why">Pourquoi nous</a>
+  <a href="#contact">Contact</a>
+  <div class="lang"><button class="lang-btn active" onclick="switchLang('fr')">FR</button><button class="lang-btn" onclick="switchLang('en')">EN</button></div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div><div class="hero-glow"></div>
+  <div class="wrap"><div class="hero-inner">
+    <div class="eyebrow" data-i18n="hero_ey">Infrastructure de paiement · Afrique centrale</div>
+    <h1 data-i18n-html="hero_h1">La couche de paiement<br><span class="lo">unifiée</span> pour<br><span class="hi">la RDC</span></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Agréé par la Banque Centrale du Congo, PRYMO DRC connecte les entreprises, les banques et les opérateurs télécoms à travers les 26 provinces via une plateforme d'agrégation unique et sécurisée.</p>
+    <div class="hero-actions">
+      <a href="#solutions" class="btn-lg-g" data-i18n="hero_b1">Découvrir nos solutions</a>
+      <a href="#contact" class="btn-lg-o" data-i18n="hero_b2">Demander une démo →</a>
+    </div>
+  </div></div>
+</section>
+
+<!-- STATS -->
+<div class="stats"><div class="wrap">
+  <div class="st"><div class="st-n"><span>26</span></div><div class="st-l" data-i18n="st1">Provinces couvertes</div></div>
+  <div class="st"><div class="st-n" data-i18n-html="st2n">Dep. <span>2017</span></div><div class="st-l" data-i18n="st2">Fondée à Kinshasa</div></div>
+  <div class="st"><div class="st-n"><span>4</span></div><div class="st-l" data-i18n="st3">Réseaux Mobile Money</div></div>
+  <div class="st"><div class="st-n"><span>24/7</span></div><div class="st-l" data-i18n="st4">Disponibilité</div></div>
+  <div class="st"><div class="st-n">CEMAC</div><div class="st-l" data-i18n="st5">Expansion régionale</div></div>
+</div></div>
+
+<!-- COMPLIANCE -->
+<div class="comp" id="compliance"><div class="wrap">
+  <div class="comp-l">
+    <div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <p class="comp-p" data-i18n-html="comp_p"><strong>Prymo DR Congo SARL</strong> est un agrégateur de paiements électroniques agréé et régulé par la <strong>Banque Centrale du Congo (BCC)</strong>. Dispositif LBC/FT et KYC appliqué à chaque transaction.</p>
+  </div>
+  <div class="comp-tags">
+    <div class="ctag" data-i18n="tag1">Agréé BCC</div>
+    <div class="ctag">AML / KYC</div>
+    <div class="ctag">Mobile Money</div>
+    <div class="ctag">API · USSD</div>
+  </div>
+</div></div>
+
+<!-- CLIENTS -->
+<div class="clients" id="clients"><div class="wrap">
+  <div class="cli-lbl" data-i18n="cli_lbl">Ils font confiance à PRYMO DRC</div>
+  <div class="logos-row">
+    <div class="logo-c"><div class="lc-n">FINCA</div><div class="lc-s" data-i18n="cl1">Microfinance</div></div>
+    <div class="logo-c"><div class="lc-n">First Bank</div><div class="lc-s">DRC</div></div>
+    <div class="logo-c"><div class="lc-n">Orange</div><div class="lc-s">RDC</div></div>
+    <div class="logo-c"><div class="lc-n">Africell</div><div class="lc-s" data-i18n="cl4">Télécom</div></div>
+    <div class="logo-c"><div class="lc-n">M-Pesa</div><div class="lc-s">Vodacom</div></div>
+    <div class="logo-c"><div class="lc-n">Sochitel</div><div class="lc-s" data-i18n="cl6">Services télécom</div></div>
+  </div>
+</div></div>
+
+<!-- WHY -->
+<section class="sec" id="why"><div class="wrap">
+  <div class="eyebrow reveal" data-i18n="why_ey">Pourquoi PRYMO DRC</div>
+  <div class="sec-h reveal" data-i18n-html="why_h">Conçu pour les réalités<br>de la finance africaine</div>
+  <p class="sec-p reveal" data-i18n="why_p">Des années d'opération sur le terrain en RDC nous donnent une infrastructure, des partenariats et une position réglementaire qu'aucun acteur international ne peut répliquer.</p>
+  <div class="why-grid reveal">
+    <div class="wc"><div class="wc-n" data-i18n="w1n">01 — Intégration</div><div class="wc-t" data-i18n="w1t">Flexibilité d'intégration</div><p class="wc-b" data-i18n="w1b">API, USSD ou portail web — notre plateforme se connecte à vos systèmes existants sans refonte coûteuse et évolue avec votre croissance.</p></div>
+    <div class="wc"><div class="wc-n" data-i18n="w2n">02 — Expertise</div><div class="wc-t" data-i18n="w2t">Profondément local</div><p class="wc-b" data-i18n="w2b">Fondée à Kinshasa en 2017, notre équipe comprend les usages, les contraintes d'infrastructure et la réalité réglementaire du terrain.</p></div>
+    <div class="wc"><div class="wc-n" data-i18n="w3n">03 — Fiabilité</div><div class="wc-t" data-i18n="w3t">Toujours disponible</div><p class="wc-b" data-i18n="w3b">Une infrastructure redondante et durcie qui soutient des opérations critiques 24/7 à travers les 26 provinces.</p></div>
+    <div class="wc"><div class="wc-n" data-i18n="w4n">04 — Couverture</div><div class="wc-t" data-i18n="w4t">Portée nationale</div><p class="wc-b" data-i18n="w4b">Interconnecté à Airtel Money, Orange Money, M-Pesa et Afrimoney, avec une expansion active vers la zone CEMAC.</p></div>
+    <div class="wc"><div class="wc-n" data-i18n="w5n">05 — Conformité</div><div class="wc-t" data-i18n="w5t">Pleinement agréé</div><p class="wc-b" data-i18n="w5b">Agrégateur autorisé par la BCC. Dispositif LBC/FT et KYC robuste couvrant chaque transaction sous supervision réglementaire.</p></div>
+    <div class="wc"><div class="wc-n" data-i18n="w6n">06 — Règlement</div><div class="wc-t" data-i18n="w6t">Corridors de paiement</div><p class="wc-b" data-i18n="w6b">Des corridors de versement vers plusieurs marchés d'Afrique de l'Ouest et centrale, pour vos partenaires et bénéficiaires hors RDC.</p></div>
+  </div>
+</div></section>
+
+<!-- SOLUTIONS -->
+<section class="sec sec-alt" id="solutions"><div class="wrap">
+  <div class="eyebrow reveal" data-i18n="sol_ey">Nos solutions</div>
+  <div class="sec-h reveal" data-i18n="sol_h">Une pile de paiement complète</div>
+  <p class="sec-p reveal" data-i18n="sol_p">De l'agrégation Mobile Money aux intégrations API d'entreprise — chaque produit est conçu pour un déploiement à l'échelle africaine.</p>
+  <div class="sol-grid reveal">
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h4l3 10 3-10h4"/><path d="M2 12h20"/></svg></div><div class="sc-t" data-i18n="s1t">Intégration API</div><p class="sc-d" data-i18n="s1d">Une API REST unique et sécurisée — documentée, versionnée et éprouvée en production sur tous les opérateurs de la RDC.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 7l7-5 7 5M5 17l7 5 7-5"/></svg></div><div class="sc-t" data-i18n="s2t">Collecte de paiements</div><p class="sc-d" data-i18n="s2d">Encaissez depuis les quatre réseaux Mobile Money via un point d'intégration unique, avec rapprochement automatique.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M14 5l7 7-7 7"/></svg></div><div class="sc-t" data-i18n="s3t">Paiements de masse</div><p class="sc-d" data-i18n="s3d">Versements en volume vers les portefeuilles mobiles — salaires, pensions, commissions, aides — avec suivi et reporting.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></div><div class="sc-t" data-i18n="s4t">Solution USSD</div><p class="sc-d" data-i18n="s4d">Menus interactifs depuis n'importe quel mobile — y compris les téléphones basiques, sans dépendance à Internet.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M8 15h3"/></svg></div><div class="sc-t" data-i18n="s5t">Portail web</div><p class="sc-d" data-i18n="s5d">Plateforme de gestion d'entreprise pour les opérations en masse, le reporting et le contrôle des comptes.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M21 21h-3M21 14v3"/></svg></div><div class="sc-t" data-i18n="s6t">QR & lien de paiement</div><p class="sc-d" data-i18n="s6d">Encaissement marchand par QR code ou lien de paiement, sans intégration technique côté commerçant.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div><div class="sc-t" data-i18n="s7t">Reçus & reporting</div><p class="sc-d" data-i18n="s7d">Reçus automatisés et rapports de transactions auditables pour une traçabilité financière complète.</p></div>
+    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="var(--bg2)"/><circle cx="16" cy="12" r="2" fill="var(--bg2)"/><circle cx="10" cy="18" r="2" fill="var(--bg2)"/></svg></div><div class="sc-t" data-i18n="s8t">Sur mesure</div><p class="sc-d" data-i18n="s8d">Développement spécifique, cadré précisément sur vos exigences techniques et opérationnelles.</p></div>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section class="sec" id="about"><div class="wrap"><div class="about-grid">
+  <div>
+    <div class="eyebrow reveal" data-i18n="ab_ey">Qui nous sommes</div>
+    <div class="sec-h reveal" style="margin-bottom:20px" data-i18n="ab_h">L'agrégateur de paiements de référence en RDC</div>
+    <p class="ab-body reveal" data-i18n="ab_p1">Fondée en 2017, PRYMO DRC est une plateforme d'agrégation financière agréée par la Banque Centrale du Congo et basée à Kinshasa. Nous opérons à l'intersection des infrastructures télécoms, de la technologie financière et de l'innovation dans les paiements — en unifiant l'expérience financière mobile de la RDC pour les entreprises, les PME et les particuliers.</p>
+    <p class="ab-body reveal" data-i18n="ab_p2">Nous avons traité des millions de transactions de crédit mobile et de transferts Mobile Money, réduisant la fracture financière entre zones urbaines et rurales grâce à une intégration profonde avec les opérateurs nationaux.</p>
+    <div class="ab-quote reveal"><p data-i18n="ab_q">« Devenir l'agrégateur et le fournisseur de solutions de paiement numérique de référence en Afrique centrale — en construisant des services fluides pour les marchés sous-desservis. »</p></div>
+  </div>
+  <div class="reveal">
+    <div class="ir"><div class="ik" data-i18n="i1k">Siège social</div><div class="iv">1 bis Avenue Lukusa, Gombe, Kinshasa, RDC<br>B.P. CT1254</div></div>
+    <div class="ir"><div class="ik" data-i18n="i2k">Entité légale</div><div class="iv">Prymo DR Congo SARL</div></div>
+    <div class="ir"><div class="ik" data-i18n="i3k">Régulateur</div><div class="iv" data-i18n-html="i3v">Banque Centrale du Congo (BCC)<br>Agrégateur de paiements électroniques agréé</div></div>
+    <div class="ir"><div class="ik" data-i18n="i4k">Couverture</div><div class="iv" data-i18n-html="i4v">Les 26 provinces de la RDC<br>Expansion vers la zone CEMAC en cours</div></div>
+    <div class="ir"><div class="ik" data-i18n="i5k">Téléphone</div><div class="iv"><a href="tel:+243815459302">(+243) 815 459 302</a></div></div>
+    <div class="ir"><div class="ik">Email</div><div class="iv"><a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a></div></div>
+  </div>
+</div></div></section>
+
+<!-- CONTACT -->
+<section class="sec sec-alt" id="contact"><div class="wrap"><div class="contact-grid">
+  <div>
+    <div class="eyebrow reveal" data-i18n="ct_ey">Nous contacter</div>
+    <div class="sec-h reveal" data-i18n-html="ct_h">Prêt à construire<br>avec nous ?</div>
+    <p class="sec-p reveal" data-i18n="ct_p">Notre équipe cadre votre solution, organise une démonstration technique ou répond à vos questions de conformité. Réponse sous 24 heures.</p>
+    <div class="reveal">
+      <div class="ir"><div class="ik" data-i18n="i1k">Siège social</div><div class="iv">1 bis Avenue Lukusa, Gombe<br>Kinshasa — RDC</div></div>
+      <div class="ir"><div class="ik" data-i18n="i5k">Téléphone</div><div class="iv"><a href="tel:+243815459302">(+243) 815 459 302</a></div></div>
+      <div class="ir"><div class="ik">Email</div><div class="iv"><a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a></div></div>
+    </div>
+  </div>
+  <div class="form reveal">
+    <h3 data-i18n="fm_h">Demander une démonstration</h3>
+    <p class="form-sub" data-i18n="fm_sub">Les champs marqués d'un * sont obligatoires.</p>
+    <form id="contactForm" action="https://formsubmit.co/infos@prymodrc.com" method="POST">
+      <input type="hidden" name="_subject" id="emailSubject" value="Nouvelle demande depuis prymodrc.com">
+      <input type="hidden" name="_next" value="https://prymodrc.com/#contact">
+      <input type="hidden" name="_captcha" value="true">
+      <input type="hidden" name="_template" value="table">
+      <input type="text" name="_honey" style="display:none">
+      <div class="row">
+        <div class="fg"><label data-i18n="f_name">Nom complet *</label><input type="text" name="name" required data-i18n-ph="f_name_ph" placeholder="Votre nom"></div>
+        <div class="fg"><label data-i18n="f_co">Entreprise *</label><input type="text" name="company" required data-i18n-ph="f_co_ph" placeholder="Nom de l'entreprise"></div>
+      </div>
+      <div class="row">
+        <div class="fg"><label data-i18n="f_mail">Email professionnel *</label><input type="email" name="email" required placeholder="nom@entreprise.com"></div>
+        <div class="fg"><label data-i18n="f_ph">Téléphone</label><input type="tel" name="phone" placeholder="+243 ..."></div>
+      </div>
+      <div class="fg"><label data-i18n="f_serv">Service souhaité</label>
+        <select name="service">
+          <option value="" data-i18n="f_sel">Sélectionnez un service</option>
+          <option data-i18n="s1t">Intégration API</option>
+          <option data-i18n="s2t">Collecte de paiements</option>
+          <option data-i18n="s3t">Paiements de masse</option>
+          <option data-i18n="s4t">Solution USSD</option>
+          <option data-i18n="s5t">Portail web</option>
+          <option data-i18n="s6t">QR & lien de paiement</option>
+          <option data-i18n="s8t">Sur mesure</option>
+        </select>
+      </div>
+      <div class="fg"><label>Message</label><textarea name="message" data-i18n-ph="f_msg_ph" placeholder="Décrivez brièvement votre besoin..."></textarea></div>
+      <button type="submit" class="btn-lg-g" data-i18n="f_send">Envoyer la demande</button>
+    </form>
+  </div>
+</div></div></section>
+
+<!-- FOOTER -->
+<footer><div class="wrap">
+  <div class="fl">
+    <div class="f-brand">PRYMO<span>.</span>DRC</div>
+    <div class="f-copy" data-i18n="ft_copy">© 2026 Prymo DR Congo SARL — Tous droits réservés</div>
+  </div>
+  <div class="f-links">
+    <a href="#about" data-i18n="nav_about">Qui nous sommes</a>
+    <a href="#solutions" data-i18n="nav_sol">Solutions</a>
+    <a href="#compliance" data-i18n="ft_comp">Conformité</a>
+    <a href="https://www.linkedin.com/company/prymodrc" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</div></footer>
+
+<script>
+const T={
+fr:{ut_pill:"Agréé BCC — Agrégateur de paiements électroniques",nav_about:"Qui nous sommes",nav_sol:"Solutions",nav_cli:"Clients",nav_why:"Pourquoi nous",nav_cta:"Demander une démo",
+hero_ey:"Infrastructure de paiement · Afrique centrale",hero_h1:'La couche de paiement<br><span class="lo">unifiée</span> pour<br><span class="hi">la RDC</span>',
+hero_sub:"Agréé par la Banque Centrale du Congo, PRYMO DRC connecte les entreprises, les banques et les opérateurs télécoms à travers les 26 provinces via une plateforme d'agrégation unique et sécurisée.",
+hero_b1:"Découvrir nos solutions",hero_b2:"Demander une démo →",
+st1:"Provinces couvertes",st2n:'Dep. <span>2017</span>',st2:"Fondée à Kinshasa",st3:"Réseaux Mobile Money",st4:"Disponibilité",st5:"Expansion régionale",
+comp_p:'<strong>Prymo DR Congo SARL</strong> est un agrégateur de paiements électroniques agréé et régulé par la <strong>Banque Centrale du Congo (BCC)</strong>. Dispositif LBC/FT et KYC appliqué à chaque transaction.',tag1:"Agréé BCC",
+cli_lbl:"Ils font confiance à PRYMO DRC",cl1:"Microfinance",cl4:"Télécom",cl6:"Services télécom",
+why_ey:"Pourquoi PRYMO DRC",why_h:"Conçu pour les réalités<br>de la finance africaine",why_p:"Des années d'opération sur le terrain en RDC nous donnent une infrastructure, des partenariats et une position réglementaire qu'aucun acteur international ne peut répliquer.",
+w1n:"01 — Intégration",w1t:"Flexibilité d'intégration",w1b:"API, USSD ou portail web — notre plateforme se connecte à vos systèmes existants sans refonte coûteuse et évolue avec votre croissance.",
+w2n:"02 — Expertise",w2t:"Profondément local",w2b:"Fondée à Kinshasa en 2017, notre équipe comprend les usages, les contraintes d'infrastructure et la réalité réglementaire du terrain.",
+w3n:"03 — Fiabilité",w3t:"Toujours disponible",w3b:"Une infrastructure redondante et durcie qui soutient des opérations critiques 24/7 à travers les 26 provinces.",
+w4n:"04 — Couverture",w4t:"Portée nationale",w4b:"Interconnecté à Airtel Money, Orange Money, M-Pesa et Afrimoney, avec une expansion active vers la zone CEMAC.",
+w5n:"05 — Conformité",w5t:"Pleinement agréé",w5b:"Agrégateur autorisé par la BCC. Dispositif LBC/FT et KYC robuste couvrant chaque transaction sous supervision réglementaire.",
+w6n:"06 — Règlement",w6t:"Corridors de paiement",w6b:"Des corridors de versement vers plusieurs marchés d'Afrique de l'Ouest et centrale, pour vos partenaires et bénéficiaires hors RDC.",
+sol_ey:"Nos solutions",sol_h:"Une pile de paiement complète",sol_p:"De l'agrégation Mobile Money aux intégrations API d'entreprise — chaque produit est conçu pour un déploiement à l'échelle africaine.",
+s1t:"Intégration API",s1d:"Une API REST unique et sécurisée — documentée, versionnée et éprouvée en production sur tous les opérateurs de la RDC.",
+s2t:"Collecte de paiements",s2d:"Encaissez depuis les quatre réseaux Mobile Money via un point d'intégration unique, avec rapprochement automatique.",
+s3t:"Paiements de masse",s3d:"Versements en volume vers les portefeuilles mobiles — salaires, pensions, commissions, aides — avec suivi et reporting.",
+s4t:"Solution USSD",s4d:"Menus interactifs depuis n'importe quel mobile — y compris les téléphones basiques, sans dépendance à Internet.",
+s5t:"Portail web",s5d:"Plateforme de gestion d'entreprise pour les opérations en masse, le reporting et le contrôle des comptes.",
+s6t:"QR & lien de paiement",s6d:"Encaissement marchand par QR code ou lien de paiement, sans intégration technique côté commerçant.",
+s7t:"Reçus & reporting",s7d:"Reçus automatisés et rapports de transactions auditables pour une traçabilité financière complète.",
+s8t:"Sur mesure",s8d:"Développement spécifique, cadré précisément sur vos exigences techniques et opérationnelles.",
+ab_ey:"Qui nous sommes",ab_h:"L'agrégateur de paiements de référence en RDC",
+ab_p1:"Fondée en 2017, PRYMO DRC est une plateforme d'agrégation financière agréée par la Banque Centrale du Congo et basée à Kinshasa. Nous opérons à l'intersection des infrastructures télécoms, de la technologie financière et de l'innovation dans les paiements — en unifiant l'expérience financière mobile de la RDC pour les entreprises, les PME et les particuliers.",
+ab_p2:"Nous avons traité des millions de transactions de crédit mobile et de transferts Mobile Money, réduisant la fracture financière entre zones urbaines et rurales grâce à une intégration profonde avec les opérateurs nationaux.",
+ab_q:"« Devenir l'agrégateur et le fournisseur de solutions de paiement numérique de référence en Afrique centrale — en construisant des services fluides pour les marchés sous-desservis. »",
+i1k:"Siège social",i2k:"Entité légale",i3k:"Régulateur",i3v:"Banque Centrale du Congo (BCC)<br>Agrégateur de paiements électroniques agréé",i4k:"Couverture",i4v:"Les 26 provinces de la RDC<br>Expansion vers la zone CEMAC en cours",i5k:"Téléphone",
+ct_ey:"Nous contacter",ct_h:"Prêt à construire<br>avec nous ?",ct_p:"Notre équipe cadre votre solution, organise une démonstration technique ou répond à vos questions de conformité. Réponse sous 24 heures.",
+fm_h:"Demander une démonstration",fm_sub:"Les champs marqués d'un * sont obligatoires.",f_name:"Nom complet *",f_name_ph:"Votre nom",f_co:"Entreprise *",f_co_ph:"Nom de l'entreprise",f_mail:"Email professionnel *",f_ph:"Téléphone",f_serv:"Service souhaité",f_sel:"Sélectionnez un service",f_msg_ph:"Décrivez brièvement votre besoin...",f_send:"Envoyer la demande",
+ft_copy:"© 2026 Prymo DR Congo SARL — Tous droits réservés",ft_comp:"Conformité"},
+en:{ut_pill:"BCC Licensed — Electronic Payment Aggregator",nav_about:"Who we are",nav_sol:"Solutions",nav_cli:"Clients",nav_why:"Why us",nav_cta:"Request a demo",
+hero_ey:"Payment infrastructure · Central Africa",hero_h1:'The <span class="lo">unified</span><br>payment layer<br>for <span class="hi">the DRC</span>',
+hero_sub:"Licensed by the Banque Centrale du Congo, PRYMO DRC connects enterprises, banks and telecom operators across all 26 provinces through a single, secure aggregation platform.",
+hero_b1:"Discover our solutions",hero_b2:"Request a demo →",
+st1:"Provinces covered",st2n:'Est. <span>2017</span>',st2:"Founded in Kinshasa",st3:"Mobile Money networks",st4:"Availability",st5:"Regional expansion",
+comp_p:'<strong>Prymo DR Congo SARL</strong> is an authorized electronic payment aggregator regulated by the <strong>Banque Centrale du Congo (BCC)</strong>. Full AML/CFT and KYC framework applied to every transaction.',tag1:"BCC Licensed",
+cli_lbl:"Trusted by leading institutions and operators across the DRC",cl1:"Microfinance",cl4:"Telecom",cl6:"Telecom services",
+why_ey:"Why PRYMO DRC",why_h:"Built for the realities<br>of African finance",why_p:"Years of ground-level operation in the DRC give us infrastructure, partnerships and regulatory standing that no international player can replicate.",
+w1n:"01 — Integration",w1t:"Plug-in flexibility",w1b:"API, USSD or web portal — our platform connects to any existing system without a costly overhaul, scaling cleanly with your growth.",
+w2n:"02 — Expertise",w2t:"Deeply local",w2b:"Founded in Kinshasa in 2017, our team understands user behaviour, infrastructure constraints and the regulatory reality on the ground.",
+w3n:"03 — Reliability",w3t:"Always on",w3b:"Hardened, redundant infrastructure supporting critical operations 24/7 across all 26 provinces.",
+w4n:"04 — Coverage",w4t:"National reach",w4b:"Integrated with Airtel Money, Orange Money, M-Pesa and Afrimoney, with active expansion into the CEMAC zone.",
+w5n:"05 — Compliance",w5t:"Fully licensed",w5b:"BCC-authorized aggregator. Robust AML/CFT and KYC framework covering every transaction under full regulatory oversight.",
+w6n:"06 — Settlement",w6t:"Payout corridors",w6b:"Payout corridors into several West and Central African markets, for your partners and beneficiaries outside the DRC.",
+sol_ey:"Our solutions",sol_h:"A complete payments stack",sol_p:"From Mobile Money aggregation to enterprise API integrations — every product built for African deployment at scale.",
+s1t:"API Integration",s1d:"Single secure REST API — documented, versioned and production-tested across all DRC operators.",
+s2t:"Payment collection",s2d:"Collect from all four Mobile Money networks through a single integration point, with automatic reconciliation.",
+s3t:"Bulk payouts",s3d:"High-volume disbursements to mobile wallets — salaries, pensions, commissions, aid — with tracking and reporting.",
+s4t:"USSD solution",s4d:"Interactive menus from any mobile — including feature phones, with zero internet dependency.",
+s5t:"Web portal",s5d:"Enterprise management platform for bulk operations, reporting and account control.",
+s6t:"QR & payment link",s6d:"Merchant collection by QR code or payment link, with no technical integration on the merchant side.",
+s7t:"Receipts & reporting",s7d:"Automated receipts and audit-ready transaction reports for full financial traceability.",
+s8t:"Tailor-made",s8d:"Custom development scoped precisely to your technical and operational requirements.",
+ab_ey:"Who we are",ab_h:"The DRC's leading payment aggregator",
+ab_p1:"Founded in 2017, PRYMO DRC is a financial aggregation platform licensed by the Banque Centrale du Congo and headquartered in Kinshasa. We operate at the intersection of telecom infrastructure, financial technology and payment innovation — unifying the DRC's mobile financial experience for enterprises, SMEs and individuals.",
+ab_p2:"We have processed millions of mobile airtime transactions and Mobile Money transfers, bridging the financial gap between urban and rural areas through deep national operator integration.",
+ab_q:"“To become the leading aggregator and provider of digital payment solutions in Central Africa — building seamless services for underserved markets.”",
+i1k:"Headquarters",i2k:"Legal entity",i3k:"Regulator",i3v:"Banque Centrale du Congo (BCC)<br>Authorized electronic payment aggregator",i4k:"Coverage",i4v:"All 26 provinces of the DRC<br>CEMAC zone expansion underway",i5k:"Phone",
+ct_ey:"Get in touch",ct_h:"Ready to build<br>with us?",ct_p:"Our team will scope a solution, arrange a technical demo or answer compliance questions. We respond within 24 hours.",
+fm_h:"Request a demonstration",fm_sub:"Fields marked with * are required.",f_name:"Full name *",f_name_ph:"Your name",f_co:"Company *",f_co_ph:"Company name",f_mail:"Business email *",f_ph:"Phone",f_serv:"Service of interest",f_sel:"Select a service",f_msg_ph:"Briefly describe your needs...",f_send:"Send request",
+ft_copy:"© 2026 Prymo DR Congo SARL — All rights reserved",ft_comp:"Compliance"}};
+let currentLang='fr';
+try{if(localStorage.getItem('prymo_lang')==='en')currentLang='en';}catch(e){}
+function switchLang(lang){
+  currentLang=lang;try{localStorage.setItem('prymo_lang',lang);}catch(e){}
+  document.documentElement.lang=lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===lang.toUpperCase()));
+  const t=T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k]!==undefined)el.textContent=t[k];});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.getAttribute('data-i18n-html');if(t[k]!==undefined)el.innerHTML=t[k];});
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(t[k]!==undefined)el.placeholder=t[k];});
+  document.title=lang==='fr'?"PRYMO DRC — Agrégateur de paiements agréé BCC":"PRYMO DRC — BCC-licensed payment aggregator";
+  document.querySelector('.mobile').classList.remove('open');
+}
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+document.querySelectorAll('.mobile a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.mobile').classList.remove('open')));
+const sects=document.querySelectorAll('section[id],div.clients[id]'),nl=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{let c='';sects.forEach(s=>{if(window.scrollY>=s.offsetTop-140)c=s.id;});nl.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));});
+document.getElementById('contactForm').addEventListener('submit',()=>{document.getElementById('emailSubject').value=currentLang==='fr'?'Nouvelle demande depuis prymodrc.com':'New request from prymodrc.com';});
+switchLang(currentLang);
+</script>
+</body>
+</html>
