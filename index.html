@@ -2,479 +2,1118 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRYMO DRC — Agrégateur de paiements agréé BCC</title>
-<meta name="description" content="PRYMO DR Congo : agrégateur de paiements électroniques agréé par la Banque Centrale du Congo. Mobile Money, API, USSD et solutions de paiement pour les entreprises en RDC.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PRYMO DRC — Mobile Money & services de paiement en RDC</title>
+<meta name="description" content="PRYMO DRC : encaissements C2B, décaissements B2C, bulk disbursements et services Mobile Money en RDC, via API, portail web et USSD.">
 <meta name="author" content="Prymo DR Congo SARL">
-<meta name="theme-color" content="#09090F">
+<meta name="theme-color" content="#061A3F">
 <meta property="og:type" content="website">
-<meta property="og:title" content="PRYMO DRC — Agrégateur de paiements agréé BCC">
-<meta property="og:description" content="La couche de paiement unifiée de la RDC. Agréé par la Banque Centrale du Congo, interconnecté à tous les réseaux Mobile Money.">
+<meta property="og:title" content="PRYMO DRC — Tout le mobile money congolais, derrière une seule intégration">
+<meta property="og:description" content="Agrégateur de paiements électroniques agréé BCC. M-Pesa, Airtel Money, Orange Money, AfriMoney — API, portail web et USSD.">
 <meta property="og:url" content="https://prymodrc.com">
+<meta property="og:image" content="https://prymodrc.com/assets/prymo-social.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://prymodrc.com">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap">
 <style>
-  :root{
-    --bg:#09090F; --bg2:#0E0E18; --bg3:#141420; --bg0:#06060C;
-    --g:#00B87A; --g-dim:rgba(0,184,122,.12); --g-border:rgba(0,184,122,.25);
-    --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
-    --dim:rgba(255,255,255,.38); --mid:rgba(255,255,255,.62); --white:#fff;
-    --cond:'Barlow Condensed',sans-serif; --body:'Barlow',sans-serif;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth;scroll-padding-top:80px}
-  body{background:var(--bg);color:var(--white);font-family:var(--body);font-weight:400;font-size:15px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:inherit}
-  .wrap{max-width:1240px;margin:0 auto;padding:0 40px}
+/* Layout: modern fintech one-pager. Dark navy hero with blue glow, light body of rounded cards on soft panels, brand blue for action, green only for success. Sentence case throughout. */
+:root{
+  --deep:#061A3F; --navy:#0B2A6B; --brand:#2563EB; --brand-2:#1D4ED8; --brand-soft:#EAF1FF; --brand-ink:#1E3A8A;
+  --ok:#10B981; --ok-soft:#E6F8F1; --warn:#D97706; --warn-soft:#FEF3C7;
+  --ink:#0F172A; --mid:#334155; --muted:#64748B; --paper:#FFFFFF; --soft:#F6F8FC; --line:#E6EAF2; --line2:#D5DCE8;
+  --on-dark:#FFFFFF; --on-dark-dim:rgba(255,255,255,.72); --on-dark-faint:rgba(255,255,255,.45); --dark-line:rgba(255,255,255,.12);
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 12px 32px -12px rgba(15,23,42,.12);
+  --shadow-lg:0 30px 80px -30px rgba(6,26,63,.55);
+  --r:16px; --r-sm:12px;
+  --font:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --ink:#F1F5F9; --mid:#CBD5E1; --muted:#94A3B8; --paper:#0B1220; --soft:#111A2E; --line:#1F2A44; --line2:#2B3856; --brand-soft:#15224A; --ok-soft:#0F2A22; --warn-soft:#3A2A0A; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.5); color-scheme:dark } }
+:root[data-theme="dark"]{ --ink:#F1F5F9; --mid:#CBD5E1; --muted:#94A3B8; --paper:#0B1220; --soft:#111A2E; --line:#1F2A44; --line2:#2B3856; --brand-soft:#15224A; --ok-soft:#0F2A22; --warn-soft:#3A2A0A; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.5); color-scheme:dark }
 
-  /* UTILITY BAR */
-  .ut{background:var(--bg0);border-bottom:1px solid var(--line);font-size:11.5px;color:var(--dim);letter-spacing:.03em}
-  .ut .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:7px;padding-bottom:7px}
-  .ut-l{display:flex;gap:22px;flex-wrap:wrap}
-  .ut-l a{text-decoration:none;color:var(--dim)} .ut-l a:hover{color:var(--mid)}
-  .bcc-pill{display:inline-flex;align-items:center;gap:7px;background:var(--g-dim);border:1px solid var(--g-border);color:var(--g);padding:3px 11px;font-size:11px;letter-spacing:.08em;font-weight:600;text-transform:uppercase;white-space:nowrap}
-  .bcc-dot{width:5px;height:5px;border-radius:50%;background:var(--g)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{background:var(--paper);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--deep)}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+@media(min-width:900px){.wrap{padding-left:max(32px,env(safe-area-inset-left,0px));padding-right:max(32px,env(safe-area-inset-right,0px))}}
+h1,h2,h3,h4{font-weight:700;letter-spacing:-.02em;line-height:1.12;text-wrap:balance}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--brand);background:var(--brand-soft);border-radius:999px;padding:6px 14px;margin-bottom:18px}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--brand)}
+.h2{font-size:clamp(30px,3.6vw,42px);font-weight:800;margin-bottom:14px;letter-spacing:-.03em}
+.lead{font-size:17px;color:var(--muted);max-width:58ch;line-height:1.65}
+.sec{padding-block:96px}
+.sec-soft{background:var(--soft)}
+.sec-head{max-width:720px;margin-bottom:48px}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.btn{font-family:var(--font);font-size:15px;font-weight:600;padding:14px 24px;border-radius:var(--r-sm);text-decoration:none;display:inline-flex;align-items:center;gap:8px;border:1px solid transparent;cursor:pointer;transition:transform .15s,box-shadow .15s,background .2s,border-color .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-brand{background:linear-gradient(180deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 8px 24px -8px rgba(37,99,235,.6)}
+.btn-brand:hover{box-shadow:0 12px 28px -8px rgba(37,99,235,.7)}
+.btn-ghost{background:var(--paper);color:var(--ink);border-color:var(--line2)} .btn-ghost:hover{border-color:var(--ink)}
+.btn-white{background:#fff;color:var(--navy)} .btn-white:hover{background:#EEF3FF}
+.btn-outline-w{background:rgba(255,255,255,.06);color:#fff;border-color:rgba(255,255,255,.28)} .btn-outline-w:hover{background:rgba(255,255,255,.12)}
+.btn::after{content:'→';font-weight:500}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.tag.soon{background:var(--warn-soft);color:var(--warn)} .tag.pilot{background:var(--ok-soft);color:var(--ok)}
+.drc-pill{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1px solid var(--dark-line);border-radius:999px;padding:8px 14px;color:#fff;font-size:13px;font-weight:600;margin-bottom:20px}
+.drc-pill img,.flag-mini{width:22px;height:14px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.client-copy{display:flex;flex-direction:column;gap:14px}
+.client-copy p{font-size:15px;color:var(--muted);max-width:62ch}
+.client-logo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:10px}
+.client-logo-grid figure{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 16px;display:flex;align-items:center;justify-content:center;min-height:92px;box-shadow:var(--shadow)}
+.client-logo-grid img{max-width:100%;max-height:48px;object-fit:contain;filter:saturate(1.02)}
+.client-note{display:flex;align-items:flex-start;gap:12px;background:var(--brand-soft);border:1px solid #DCE7FB;border-radius:18px;padding:18px;margin-top:22px;color:var(--brand-ink)}
+.client-note b{display:block;font-size:15px;margin-bottom:2px}
+.client-note p{font-size:14px;color:#33507f}
+.client-trust{padding-top:12px}
+.client-trust .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:start;border-bottom:1px solid #E7ECF4;padding-bottom:34px}
+.client-intro{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#246BFD;margin-bottom:10px}
+.client-badge{display:inline-flex;align-items:center;gap:8px;background:#ECFDF5;color:#047857;border:1px solid #CDEEDB;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;margin-top:6px;width:fit-content}
+.client-badge i{width:7px;height:7px;border-radius:50%;background:#10B981}
 
-  /* NAV */
-  nav{background:rgba(9,9,15,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100}
-  nav .wrap{display:flex;justify-content:space-between;align-items:center;height:66px}
-  .logo-mark{display:flex;align-items:center;gap:12px;text-decoration:none}
-  .logo-text{font-family:var(--cond);font-size:22px;font-weight:700;letter-spacing:.06em;color:var(--white);text-transform:uppercase}
-  .logo-text span{color:var(--g)}
-  .nav-links{display:flex;gap:30px;list-style:none}
-  .nav-links a{font-size:13px;color:var(--dim);text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:color .2s}
-  .nav-links a:hover,.nav-links a.active{color:var(--white)}
-  .nav-r{display:flex;gap:10px;align-items:center}
-  .lang{display:flex;border:1px solid var(--line2)}
-  .lang button{background:transparent;border:none;color:var(--dim);font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.08em;padding:7px 11px;cursor:pointer}
-  .lang button.active{background:var(--g);color:var(--bg0)}
-  .btn-g{padding:9px 20px;background:var(--g);border:1px solid var(--g);color:var(--bg0);font-size:12px;font-weight:700;cursor:pointer;font-family:var(--body);letter-spacing:.05em;text-transform:uppercase;text-decoration:none;display:inline-block;transition:filter .2s}
-  .btn-g:hover{filter:brightness(1.1)}
-  .burger{display:none;background:none;border:none;cursor:pointer;padding:8px}
-  .burger span{display:block;width:22px;height:2px;background:var(--white);margin:5px 0}
-  .mobile{display:none;position:fixed;inset:0;background:var(--bg0);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:28px}
-  .mobile.open{display:flex}
-  .mobile a{font-family:var(--cond);font-size:26px;letter-spacing:.06em;text-transform:uppercase;color:var(--white);text-decoration:none}
-  .mobile .close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--white);font-size:30px;cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+svg.i{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-  /* HERO */
-  .hero{padding:110px 0 90px;position:relative;overflow:hidden}
-  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,184,122,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,184,122,.025) 1px,transparent 1px);background-size:48px 48px}
-  .hero-glow{position:absolute;right:-60px;top:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(0,184,122,.1) 0%,transparent 65%);pointer-events:none}
-  .hero-inner{position:relative;z-index:1;max-width:700px}
-  .eyebrow{font-family:var(--cond);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--g);display:flex;align-items:center;gap:12px;margin-bottom:22px}
-  .eyebrow::before{content:'';width:28px;height:1px;background:var(--g);flex-shrink:0}
-  .hero h1{font-family:var(--cond);font-size:clamp(44px,6.5vw,70px);line-height:1;font-weight:700;letter-spacing:.01em;text-transform:uppercase;margin-bottom:24px}
-  .hero h1 .lo{font-weight:300;font-style:italic;text-transform:none;font-family:var(--body);font-size:.88em;letter-spacing:-.01em}
-  .hero h1 .hi{color:var(--g)}
-  .hero-sub{font-size:16.5px;font-weight:300;color:var(--mid);line-height:1.7;max-width:540px;margin-bottom:40px}
-  .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
-  .btn-lg-g{padding:15px 32px;background:var(--g);border:1px solid var(--g);color:var(--bg0);font-size:13px;font-weight:700;font-family:var(--body);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:filter .2s}
-  .btn-lg-g:hover{filter:brightness(1.1)}
-  .btn-lg-o{padding:15px 32px;border:1px solid var(--line2);background:transparent;color:var(--mid);font-size:13px;font-weight:500;font-family:var(--body);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,color .2s}
-  .btn-lg-o:hover{border-color:var(--g);color:var(--white)}
+/* UTILITY + NAV */
+.ut{background:var(--deep);color:var(--on-dark-faint);font-size:13px}
+.ut .wrap{display:flex;justify-content:flex-start;align-items:center;gap:16px;padding-block:8px}
+.ut-l{display:flex;gap:22px} .ut a{text-decoration:none}
+.bcc{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:#86EFAC;background:rgba(16,185,129,.12);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.bcc i{width:6px;height:6px;border-radius:50%;background:var(--ok)}
+nav{background:rgba(6,26,63,.85);backdrop-filter:blur(16px);position:sticky;top:env(safe-area-inset-top,0px);z-index:50;border-bottom:1px solid var(--dark-line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.logo img{height:42px;width:auto;display:block;background:#fff;padding:4px 6px;border-radius:8px}
+.logo-t{font-weight:800;font-size:18px;letter-spacing:-.01em;line-height:1}
+.logo-s{display:block;font-size:11px;font-weight:500;color:var(--on-dark-faint);margin-top:3px;text-transform:none;letter-spacing:0}
+.nl{display:flex;gap:4px;list-style:none}
+.nl a{font-size:14px;font-weight:500;color:var(--on-dark-dim);text-decoration:none;padding:8px 12px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s}
+.nl a:hover,.nl a.on{color:#fff;background:rgba(255,255,255,.1)}
+.nr{display:flex;align-items:center;gap:10px}
+.lang{display:flex;border-radius:999px;background:rgba(255,255,255,.08);padding:3px}
+.lang button{background:transparent;border:0;color:var(--on-dark-dim);font-family:var(--font);font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;cursor:pointer}
+.lang button.active{background:#fff;color:var(--navy)}
+.nav-cta{font-size:14px;font-weight:600;background:var(--brand);color:#fff;padding:10px 18px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.burger{display:none;background:none;border:0;cursor:pointer;padding:8px}
+.burger span{display:block;width:22px;height:2px;background:#fff;margin:5px 0;border-radius:2px}
+.mobile{display:none;position:fixed;inset:0;background:var(--deep);z-index:100;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px}
+.mobile.open{display:flex}
+.mobile a{font-size:24px;font-weight:600;color:#fff;text-decoration:none}
+.mobile .x{position:absolute;top:calc(18px + env(safe-area-inset-top,0px));right:24px;background:none;border:0;color:#fff;font-size:30px;cursor:pointer}
 
-  /* STATS */
-  .stats{background:var(--bg0);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .stats .wrap{display:grid;grid-template-columns:repeat(5,1fr);padding:0}
-  .st{padding:30px 20px;text-align:center;border-right:1px solid var(--line)}
-  .st:last-child{border-right:none}
-  .st-n{font-family:var(--cond);font-size:32px;font-weight:700;letter-spacing:.02em}
-  .st-n span{color:var(--g)}
-  .st-l{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:5px}
+/* HERO */
+.hero{background:radial-gradient(900px 600px at 80% 10%,rgba(37,99,235,.45),transparent 60%),radial-gradient(700px 500px at 10% 90%,rgba(16,185,129,.18),transparent 60%),linear-gradient(180deg,#061A3F 0%,#0B2A6B 100%);color:#fff;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1px,transparent 1px);background-size:26px 26px;mask-image:radial-gradient(ellipse 60% 70% at 50% 40%,#000 10%,transparent 100%);pointer-events:none;opacity:.5}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding-block:96px 88px}
+.hero .eyebrow{background:rgba(255,255,255,.1);color:#fff} .hero .eyebrow::before{background:#86EFAC}
+.hero h1{font-size:clamp(40px,5.2vw,64px);font-weight:800;margin-bottom:22px;letter-spacing:-.035em}
+.hero h1 .lo{font-weight:800}
+.hero h1 .hi{background:linear-gradient(90deg,#93C5FD,#6EE7B7);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;color:var(--on-dark-dim);max-width:54ch;margin-bottom:34px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:44px}
+.hero-facts{display:grid;grid-template-columns:repeat(3,auto);gap:14px;width:fit-content}
+.hf{background:rgba(255,255,255,.07);border:1px solid var(--dark-line);border-radius:var(--r-sm);padding:12px 18px}
+.hf b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.hf span{font-size:12.5px;color:var(--on-dark-faint);display:block;margin-top:3px}
+/* dashboard card */
+.stmt{background:var(--paper);color:var(--ink);border-radius:20px;box-shadow:var(--shadow-lg);overflow:hidden;position:relative}
+.stmt-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted)}
+.live{display:inline-flex;align-items:center;gap:7px;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:3px 10px;font-size:12px} .live i{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.stmt-tot{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 20px}
+.stmt-tot>div{border-radius:var(--r-sm);padding:14px 16px;background:var(--soft)}
+.stmt-tot>div:first-child{background:linear-gradient(135deg,var(--brand),var(--navy));color:#fff}
+.stmt-tot>div:first-child small{color:rgba(255,255,255,.7)}
+.stmt-tot small{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
+.stmt-tot b{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.stmt table{width:100%;border-collapse:collapse;font-size:14px}
+.stmt td,.stmt th{padding:11px 20px;text-align:left;border-top:1px solid var(--line)}
+.stmt th{font-size:12px;font-weight:600;color:var(--muted);border-top:0}
+.stmt td.r{text-align:right;font-weight:700} .stmt td.r.in{color:var(--ok)}
+.stmt td small{color:var(--muted);font-size:12px;margin-left:8px}
+.stmt-f{padding:12px 20px;background:var(--ok-soft);color:var(--ok);font-size:12.5px;font-weight:600;display:flex;gap:8px;align-items:center}
+.stmt-f svg{width:14px;height:14px;stroke:var(--ok)}
 
-  /* COMPLIANCE */
-  .comp{background:rgba(0,184,122,.05);border-bottom:1px solid var(--g-border)}
-  .comp .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:22px;padding-bottom:22px}
-  .comp-l{display:flex;align-items:center;gap:20px}
-  .comp-icon{width:44px;height:44px;border:1px solid var(--g-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--g)}
-  .comp-p{font-size:13.5px;color:var(--dim);line-height:1.6;max-width:520px}
-  .comp-p strong{color:var(--white);font-weight:500}
-  .comp-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-  .ctag{font-size:10.5px;font-weight:600;padding:4px 12px;border:1px solid var(--g-border);color:rgba(0,184,122,.85);letter-spacing:.07em;text-transform:uppercase;background:var(--g-dim);white-space:nowrap}
+/* TRUST */
+.trust{padding-block:36px 8px}
+.trust .wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tcol{background:var(--soft);border-radius:var(--r);padding:22px 26px}
+.tcol .lbl{margin-bottom:14px}
+.ops{display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.ops img{height:26px;width:auto;max-width:120px;object-fit:contain;opacity:.9}
+.cli{display:flex;gap:10px;flex-wrap:wrap}
+.cli span{font-size:13px;font-weight:600;color:var(--mid);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
 
-  /* CLIENTS */
-  .clients{background:var(--bg2);padding:52px 0;border-bottom:1px solid var(--line)}
-  .cli-lbl{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:28px}
-  .logos-row{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line)}
-  .logo-c{padding:24px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid var(--line);gap:4px}
-  .logo-c:last-child{border-right:none}
-  .logo-c:hover{background:rgba(255,255,255,.03)}
-  .lc-n{font-family:var(--cond);font-size:17px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
-  .lc-s{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.28)}
+/* WHY */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.why>div{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.why>div:hover{transform:translateY(-3px)}
+.why .k{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:700;margin-bottom:18px;text-transform:uppercase;letter-spacing:.02em}
+.why h3{font-size:19px;margin-bottom:8px}
+.why p{font-size:15px;color:var(--muted)}
 
-  /* SECTIONS */
-  .sec{padding:88px 0}
-  .sec-alt{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-  .sec-h{font-family:var(--cond);font-size:clamp(32px,4vw,42px);font-weight:700;letter-spacing:.03em;text-transform:uppercase;line-height:1.05;margin-bottom:12px}
-  .sec-p{font-size:14.5px;font-weight:300;color:var(--dim);line-height:1.75;max-width:520px;margin-bottom:48px}
+/* PLATFORM */
+.plat{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.opsl{margin-top:28px;display:grid;gap:8px}
+.opsl>div{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);font-size:15px;align-items:center}
+.opsl>div b{font-weight:600} .opsl>div span{color:var(--muted);font-size:13px;font-weight:500}
+.dev{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;margin-top:32px}
+.dev>div{display:flex;gap:12px}
+.dev svg{color:var(--brand);margin-top:3px;background:var(--brand-soft);border-radius:8px;padding:6px;width:32px;height:32px}
+.dev b{display:block;font-weight:700;font-size:15px} .dev p{font-size:14px;color:var(--muted)}
+.code{background:var(--deep);color:#DCE6F5;border-radius:var(--r);font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:13px;line-height:1.65;overflow-x:auto;box-shadow:var(--shadow-lg);position:sticky;top:100px}
+.code-h{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--dark-line);font-family:var(--font);font-size:12.5px;font-weight:600;color:var(--on-dark-faint)}
+.code pre{padding:18px;margin:0;min-width:0}
+.code .c{color:rgba(220,230,245,.45)} .code .k{color:#6EE7B7} .code .s{color:#FCD34D} .code .n{color:#93C5FD}
 
-  /* WHY */
-  .why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-  .wc{background:var(--bg);padding:36px 28px;transition:background .2s}
-  .wc:hover{background:var(--bg3)}
-  .wc-n{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--g);opacity:.7;margin-bottom:16px;text-transform:uppercase}
-  .wc-t{font-family:var(--cond);font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
-  .wc-b{font-size:13.5px;font-weight:300;color:var(--dim);line-height:1.75}
+/* SOLUTIONS */
+.fam{display:grid;grid-template-columns:280px 1fr;gap:32px;padding-block:40px}
+.fam+.fam{border-top:1px solid var(--line)}
+.fam .lbl{color:var(--brand)}
+.fam h3{font-size:26px;font-weight:800;margin:8px 0 8px;letter-spacing:-.02em}
+.fam .fd{font-size:15px;color:var(--muted);max-width:30ch}
+.items{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.it{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);transition:transform .2s}
+.it:hover{transform:translateY(-3px)}
+.it b{font-size:16px;font-weight:700}
+.it p{font-size:14px;color:var(--muted)}
+.it .tag{align-self:flex-start;margin-top:6px}
 
-  /* SOLUTIONS */
-  .sol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-  .sc{background:var(--bg2);padding:28px 22px;border-bottom:2px solid transparent;transition:background .2s,border-color .2s}
-  .sc:hover{background:var(--bg3);border-bottom-color:var(--g)}
-  .sc-icon{width:38px;height:38px;border:1px solid var(--g-border);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--g);background:var(--g-dim)}
-  .sc-icon svg{width:18px;height:18px}
-  .sc-t{font-family:var(--cond);font-size:16px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
-  .sc-d{font-size:12.5px;font-weight:300;color:var(--dim);line-height:1.65}
+/* BAND (Accept + WhatsApp) */
+.band{background:var(--soft)}
+.band .lead{color:var(--muted)}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding-block:88px}
+.feat+.feat{border-top:1px solid var(--line)}
+.pts{display:grid;grid-template-columns:1fr 1fr;gap:18px 22px;margin-top:30px}
+.pts>div{display:flex;gap:12px;font-size:14px;color:var(--muted)}
+.pts b{color:var(--ink);font-weight:700;display:block;font-size:15px}
+.pts svg{color:var(--ok);margin-top:1px;background:var(--ok-soft);border-radius:50%;padding:4px;width:24px;height:24px}
+.band .btn-white{background:var(--brand);color:#fff;box-shadow:0 8px 24px -8px rgba(37,99,235,.6)}
+.band .btn-outline-w{background:var(--paper);color:var(--ink);border-color:var(--line2)}
+.qr{background:var(--paper);color:var(--ink);padding:28px;max-width:360px;margin:0 auto;border-radius:20px;box-shadow:var(--shadow-lg)}
+.qr-grid{display:grid;grid-template-columns:repeat(9,1fr);gap:3px;width:198px;margin:20px auto;padding:14px;background:var(--soft);border-radius:var(--r-sm);box-sizing:content-box}
+.qr-grid i{aspect-ratio:1;background:var(--ink);display:block;border-radius:2px} .qr-grid i.o{background:transparent}
+.qr .code6{font-size:26px;font-weight:800;letter-spacing:.14em;text-align:center;color:var(--brand);margin:6px 0 14px}
+.qr-ops{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
+.qr-ops span{font-size:11.5px;font-weight:600;color:var(--muted);background:var(--soft);border-radius:999px;padding:3px 9px}
+.chat{background:var(--paper);color:var(--ink);padding:20px;max-width:380px;margin:0 auto;border-radius:20px;box-shadow:var(--shadow-lg)}
+.chat .ch{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between;gap:10px}
+.chat .ch span:first-child{color:var(--ink)}
+.msg{max-width:88%;padding:11px 14px;font-size:14px;line-height:1.5;margin-bottom:8px;border-radius:14px}
+.msg.me{background:var(--brand);color:#fff;margin-left:auto;border-bottom-right-radius:4px} .msg.me small{color:rgba(255,255,255,.7)}
+.msg.bot{background:var(--soft);border-bottom-left-radius:4px}
+.msg small{display:block;font-size:11px;color:var(--muted);margin-top:4px;text-align:right}
+.msg .st{display:inline-block;font-size:12px;font-weight:600;color:var(--warn);background:var(--warn-soft);border-radius:999px;padding:2px 9px;margin:6px 0}
+.msg .ref{font-family:ui-monospace,Menlo,monospace;font-size:13px;font-weight:700}
 
-  /* ABOUT */
-  .about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:72px;align-items:start}
-  .ab-body{font-size:14.5px;font-weight:300;color:var(--mid);line-height:1.85;margin-bottom:20px}
-  .ab-quote{border-left:2px solid var(--g);padding-left:22px;margin-top:32px}
-  .ab-quote p{font-size:16px;font-style:italic;font-weight:300;color:var(--mid);line-height:1.65}
-  .ir{display:grid;grid-template-columns:140px 1fr;gap:12px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
-  .ir:first-child{padding-top:0} .ir:last-child{border-bottom:none}
-  .ik{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-top:2px}
-  .iv{font-size:13.5px;color:var(--mid);line-height:1.6}
-  .iv a{text-decoration:none} .iv a:hover{color:var(--white)}
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.steps>div{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:28px;counter-increment:s;box-shadow:var(--shadow)}
+.steps>div::before{content:counter(s);display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--navy));color:#fff;font-weight:800;font-size:16px;margin-bottom:18px}
+.steps h3{font-size:19px;margin-bottom:8px} .steps p{font-size:15px;color:var(--muted)}
 
-  /* CONTACT */
-  .contact-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:64px;align-items:start}
-  .form{border:1px solid var(--line);background:var(--bg2);padding:36px}
-  .form h3{font-family:var(--cond);font-size:22px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:6px}
-  .form-sub{font-size:12.5px;color:var(--dim);margin-bottom:24px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-  .fg label{font-family:var(--cond);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-  .fg input,.fg select,.fg textarea{background:var(--bg);border:1px solid var(--line2);color:var(--white);font-family:var(--body);font-size:14px;padding:11px 13px;outline:none;transition:border-color .2s;width:100%}
-  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--g)}
-  .fg select option{background:var(--bg)}
-  .fg textarea{min-height:120px;resize:vertical}
-  .form .btn-lg-g{border:none;cursor:pointer;width:100%;justify-content:center;margin-top:6px}
+/* SECTORS + COMPLIANCE */
+.sect{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.sect>div{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.sect h3{font-size:17px;margin-bottom:6px} .sect p{font-size:14px;color:var(--muted)}
+.conf{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;background:linear-gradient(135deg,#061A3F,#0B2A6B);color:#fff;border-radius:24px;padding:56px}
+.conf .eyebrow{background:rgba(255,255,255,.1);color:#fff} .conf .eyebrow::before{background:#86EFAC}
+.conf .lead{color:var(--on-dark-dim)}
+.conf .btn-ghost{background:#fff;color:var(--navy);border-color:#fff}
+.chk{display:grid;gap:10px}
+.chk>div{display:grid;grid-template-columns:28px 1fr;gap:14px;padding:16px 18px;background:rgba(255,255,255,.07);border:1px solid var(--dark-line);border-radius:var(--r-sm)}
+.chk svg{color:#86EFAC;margin-top:2px} .chk b{display:block;font-weight:700} .chk p{font-size:14px;color:var(--on-dark-dim)}
 
-  /* FOOTER */
-  footer{background:var(--bg0);border-top:1px solid var(--line);padding:28px 0}
-  footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
-  .fl{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-  .f-brand{font-family:var(--cond);font-size:16px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4)}
-  .f-brand span{color:var(--g)}
-  .f-copy{font-size:12px;color:rgba(255,255,255,.25)}
-  .f-links{display:flex;gap:20px;flex-wrap:wrap}
-  .f-links a{font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.3);text-decoration:none}
-  .f-links a:hover{color:rgba(255,255,255,.6)}
+/* FAQ */
+.faq{max-width:820px;display:grid;gap:10px}
+.faq details{background:var(--paper);border:1px solid var(--line);border-radius:var(--r-sm);padding:0 20px}
+.faq summary{list-style:none;cursor:pointer;padding:18px 0;font-weight:600;font-size:16px;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-size:22px;color:var(--brand);line-height:1}
+.faq details[open] summary::after{content:'−'}
+.faq details p{padding:0 0 18px;color:var(--muted);max-width:68ch}
 
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.visible{opacity:1;transform:none}
+/* CONTACT */
+.ct{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.ir{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+.ir .lbl{padding-top:3px} .ir div{font-size:15px;color:var(--mid)} .ir a{text-decoration:none;color:var(--brand);font-weight:500}
+.form{border:1px solid var(--line);background:var(--paper);padding:32px;border-radius:20px;box-shadow:var(--shadow-lg)}
+.form h3{font-size:22px;margin-bottom:4px}
+.form .fs{font-size:13px;color:var(--muted);margin-bottom:22px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;min-width:0}
+.fg label{font-size:13px;font-weight:600;color:var(--mid)}
+.fg input,.fg select,.fg textarea{background:var(--soft);border:1px solid var(--line);color:var(--ink);font-family:var(--font);font-size:15px;padding:12px 14px;width:100%;outline:none;border-radius:10px;transition:border-color .2s,box-shadow .2s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.15);background:var(--paper)}
+.fg textarea{min-height:110px;resize:vertical}
+.form .btn{width:100%;justify-content:center;margin-top:4px}
+.form .fn{font-size:12.5px;color:var(--muted);margin-top:12px}
+.ok{display:none;padding:14px;border-radius:10px;background:var(--ok-soft);color:var(--ok);font-size:14px;font-weight:600;margin-top:12px}
 
-  @media (max-width:1024px){
-    .stats .wrap{grid-template-columns:repeat(3,1fr)} .st:nth-child(3n){border-right:none} .st{border-bottom:1px solid var(--line)}
-    .why-grid{grid-template-columns:repeat(2,1fr)} .sol-grid{grid-template-columns:repeat(2,1fr)}
-    .logos-row{grid-template-columns:repeat(3,1fr)} .logo-c:nth-child(3n){border-right:none} .logo-c{border-bottom:1px solid var(--line)}
-    .about-grid,.contact-grid{grid-template-columns:1fr;gap:44px}
-    .comp .wrap{flex-direction:column;align-items:flex-start} .comp-tags{justify-content:flex-start}
-  }
-  @media (max-width:768px){
-    .wrap{padding:0 20px}
-    .ut{display:none}
-    .nav-links,.nav-r .btn-g{display:none} .burger{display:block}
-    .hero{padding:72px 0 60px}
-    .stats .wrap{grid-template-columns:repeat(2,1fr)} .st:nth-child(3n){border-right:1px solid var(--line)} .st:nth-child(2n){border-right:none} .st:last-child{grid-column:1/-1;border-bottom:none}
-    .why-grid,.sol-grid{grid-template-columns:1fr}
-    .logos-row{grid-template-columns:repeat(2,1fr)} .logo-c:nth-child(3n){border-right:1px solid var(--line)} .logo-c:nth-child(2n){border-right:none}
-    .row{grid-template-columns:1fr} .form{padding:24px}
-    .sec{padding:64px 0}
-    .ir{grid-template-columns:1fr;gap:4px}
-  }
+/* FOOTER */
+footer{background:var(--deep);color:var(--on-dark-dim);padding-block:56px 28px}
+.fg4{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px;margin-bottom:40px}
+footer h4{font-size:14px;color:#fff;margin-bottom:14px}
+footer ul{list-style:none;display:grid;gap:9px} footer li a{font-size:14px;text-decoration:none;color:var(--on-dark-dim)} footer li a:hover{color:#fff}
+.fdesc{font-size:14px;max-width:38ch;margin-top:14px}
+.fbot{border-top:1px solid var(--dark-line);padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--on-dark-faint)}
+
+@media(max-width:1024px){
+  .hero .wrap{grid-template-columns:1fr;gap:44px}
+  .trust .wrap{grid-template-columns:1fr}
+  .why{grid-template-columns:1fr 1fr} .plat,.ct,.feat{grid-template-columns:1fr;gap:40px} .conf{grid-template-columns:1fr;padding:36px}
+  .code{position:static}
+  .fam{grid-template-columns:1fr;gap:18px} .items{grid-template-columns:1fr 1fr}
+  .sect{grid-template-columns:repeat(3,1fr)} .steps{grid-template-columns:1fr}
+  .fg4{grid-template-columns:1fr 1fr}
+  .client-trust .wrap{grid-template-columns:1fr}
+  .client-logo-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:760px){
+  .client-logo-grid{grid-template-columns:repeat(2,1fr)}
+  .drc-pill{font-size:12px;padding:8px 12px}
+}
+@media(max-width:720px){
+  .ut{display:none} .nl,.nav-cta{display:none} .burger{display:block}
+  .hero .wrap{padding-block:56px 48px} .hero-facts{grid-template-columns:1fr 1fr;width:100%}
+  .why{grid-template-columns:1fr} .items{grid-template-columns:1fr} .sect{grid-template-columns:1fr 1fr}
+  .row{grid-template-columns:1fr} .form{padding:22px} .sec{padding-block:64px} .fg4{grid-template-columns:1fr}
+  .dev,.pts{grid-template-columns:1fr} .ir{grid-template-columns:1fr;gap:4px} .conf{padding:28px 22px;border-radius:18px}
+}
+
+/* PRYMO REFINED 2026 — visual layer layered on original bilingual product site */
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+ --deep:#071B3B;--navy:#0C2A60;--brand:#246BFD;--brand-2:#1551DB;--brand-soft:#E9F0FF;--brand-ink:#194BA6;
+ --ok:#079D81;--ok-soft:#E5FAF3;--ink:#10213B;--mid:#41526B;--muted:#62738B;--paper:#FFFFFF;--soft:#F4F7FC;--line:#E4EAF3;--line2:#D5DFED;
+ --on-dark:#FFFFFF;--on-dark-dim:rgba(255,255,255,.77);--on-dark-faint:rgba(255,255,255,.58);--dark-line:rgba(255,255,255,.14);
+ --shadow:0 12px 36px -24px rgba(9,31,72,.32);--shadow-lg:0 35px 76px -38px rgba(9,31,72,.42);
+ --r:19px;--r-sm:13px;--font:'Inter','Segoe UI',system-ui,sans-serif;--headfont:'Manrope','Inter',system-ui,sans-serif;color-scheme:light
+}
+body{font-size:15.5px;line-height:1.7;letter-spacing:-.006em;background:#fff}
+h1,h2,h3,h4,.logo-t,.stmt-tot b,.hf b{font-family:var(--headfont)}
+h1,h2,h3{letter-spacing:-.048em;line-height:1.17}
+.h2{font-size:clamp(31px,3.5vw,49px);letter-spacing:-.055em;line-height:1.14}
+.lead{font-size:16px;color:var(--muted);line-height:1.82}
+.sec{padding-block:102px}
+.sec-head{margin-bottom:44px}
+.eyebrow{color:#1656C9;background:#EAF2FF;font-weight:750;font-family:var(--headfont);font-size:12px;letter-spacing:.012em;padding:7px 13px}
+.eyebrow::before{background:#18BBA8;width:7px;height:7px}
+.lbl{font-weight:750;font-size:11px;letter-spacing:.1em}
+.brand-gradient{background:linear-gradient(115deg,#246BFD 8%,#0DB9C1 95%);color:transparent;background-clip:text;-webkit-background-clip:text}
+.btn{font-weight:700;padding:14px 22px;min-height:50px;border-radius:12px;font-size:14px;letter-spacing:-.01em}
+.btn-brand{background:#246BFD;box-shadow:0 13px 23px -13px rgba(36,107,253,.75)}
+.btn-brand:hover{background:#1456E5;box-shadow:0 18px 26px -13px rgba(36,107,253,.75)}
+.skip-link{position:fixed;top:-60px;left:16px;z-index:900;background:#fff;color:var(--navy);padding:12px 18px;border-radius:10px}
+.skip-link:focus{top:16px}
+
+/* NAV — crisp white surface paired with reassuring dark status bar */
+.ut{background:var(--deep);color:#C5D4EC;font-size:12px;letter-spacing:.015em}
+.ut .wrap{padding-block:9px}
+.bcc{font-size:11px;color:#A9F6DE;background:rgba(12,194,152,.14)}
+nav{top:0;background:rgba(255,255,255,.96);border-bottom:1px solid #E6EBF4;box-shadow:0 7px 28px -23px #193454;backdrop-filter:blur(20px)}
+nav .wrap{height:83px}
+.logo{color:var(--navy);gap:10px}
+.logo img{height:54px;width:auto;background:#fff;padding:0;border-radius:5px}
+.logo-t{font-weight:850;font-size:17px;letter-spacing:-.04em}
+.logo-s{color:#61738F;font-size:9.5px;line-height:1.35;max-width:168px}
+.nl a{color:#415371;font-size:13px;font-weight:650;padding:10px 10px}
+.nl a:hover,.nl a.on{background:#EDF3FF;color:#1956C3}
+.lang{background:#F0F3F9;border:1px solid #E8EDF6}
+.lang button{color:#596A85;font-size:11px}
+.lang button.active{background:#fff;color:#1755BE;box-shadow:0 2px 8px rgba(23,49,87,.12)}
+.nav-cta{font-size:13px;background:#246BFD;padding:11px 17px;box-shadow:0 8px 22px -15px #246BFD}
+.nav-cta:hover{background:#1455DA}
+.burger span{background:var(--navy)}
+.mobile{background:var(--deep)}
+.mobile .lang{background:rgba(255,255,255,.15);border:none}
+
+/* HERO — editorial photo anchored by enterprise payment elements */
+.hero{background:radial-gradient(740px 480px at 90% 8%,rgba(72,153,255,.13),transparent 75%),radial-gradient(680px 530px at -12% 100%,rgba(19,196,179,.08),transparent 70%),#F8FBFF;color:var(--ink)}
+.hero::after{background-image:radial-gradient(#BDCAE2 .7px,transparent .7px);background-size:20px 20px;opacity:.21;mask-image:linear-gradient(90deg,transparent 30%,black 80%)}
+.hero .wrap{grid-template-columns:1.06fr .94fr;gap:68px;align-items:center;padding-block:78px 100px}
+.hero .eyebrow{background:#E8F3FF;color:#1757BC}
+.hero .eyebrow::before{background:#13B9A2}
+.hero h1{color:#0A2149;font-weight:800;font-size:clamp(42px,4.5vw,65px);line-height:1.075;letter-spacing:-.065em;margin-bottom:25px}
+.hero h1 .hi{background:linear-gradient(95deg,#246BFD 12%,#03AFAF 100%);background-clip:text;-webkit-background-clip:text}
+.hero p{font-size:16px;color:#526680;line-height:1.85;margin-bottom:30px;max-width:58ch}
+.hero-actions{margin-bottom:37px}
+.hero .btn-white{background:var(--brand);color:#fff;border:1px solid var(--brand);box-shadow:0 17px 27px -18px rgba(36,107,253,.82)}
+.hero .btn-white:hover{background:#1455DD}
+.hero .btn-outline-w{background:#fff;color:#214474;border-color:#D2DFEE}
+.hero .btn-outline-w:hover{border-color:#96B6E0;background:#F6FAFF}
+.hero-facts{display:flex;gap:0;width:100%;max-width:620px}
+.hf{border:0;border-right:1px solid #DCE4F0;border-radius:0;background:transparent;padding:2px 20px;min-width:0;flex:1}
+.hf:first-child{padding-left:0}
+.hf:last-child{border:0;padding-right:0}
+.hf b{font-weight:850;font-size:22px;color:#0D2B60}
+.hf span{font-size:11px;font-weight:550;color:#657893;white-space:normal;line-height:1.45;margin-top:6px}
+.hero-visual{position:relative;height:530px;margin-left:16px;filter:drop-shadow(0 36px 38px rgba(14,40,83,.12))}
+.hero-img-frame{height:100%;overflow:hidden;border-radius:31px;box-shadow:0 30px 67px -35px rgba(6,27,64,.4);background:#D5E3ED;transform:rotate(1deg)}
+.hero-img{width:100%;height:100%;object-fit:cover;object-position:38% 50%;display:block;filter:saturate(.98)}
+.hero-img-frame::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 55%,rgba(3,25,57,.15))}
+.payment-toast{position:absolute;left:-45px;bottom:48px;display:flex;align-items:center;gap:15px;min-width:270px;padding:15px 20px;border:1px solid rgba(225,235,249,.9);background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-radius:18px;box-shadow:0 22px 50px -20px rgba(5,24,56,.38);transform:rotate(-2deg)}
+.payment-tick{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;font-size:21px;color:#087F6D;background:#E1F9EF;border-radius:13px;font-weight:800}
+.payment-toast span:last-child{display:grid;gap:3px}
+.payment-toast small{font-size:10.5px;font-weight:650;color:#667B94}
+.payment-toast strong{font-size:21px;letter-spacing:-.04em;color:#11274C;font-family:var(--headfont)}
+.payment-toast small:last-child{color:#128C70}
+.hero-mark{position:absolute;right:-12px;top:25px;display:flex;align-items:center;gap:8px;background:#0B2C62;color:#F4FBFF;padding:9px 12px;border-radius:999px;max-width:88%;box-shadow:0 12px 22px rgba(14,36,77,.18);font-size:10px;font-weight:650;transform:rotate(2deg)}
+.pulse-dot{display:block;width:7px;height:7px;background:#36E0BB;border-radius:50%;box-shadow:0 0 0 4px rgba(54,224,187,.15);flex-shrink:0}
+
+/* TRUST BAR */
+.trust{padding-block:5px 30px;background:#fff}
+.trust .wrap{gap:0;align-items:center;border-bottom:1px solid #E7ECF4}
+.tcol{padding:35px 12px 35px 0;border-radius:0;background:transparent;min-width:0}
+.tcol+.tcol{padding-left:28px;border-left:1px solid var(--line)}
+.tcol .lbl{color:#7B889A;margin-bottom:19px;font-size:10px}
+.ops{gap:23px 25px}
+.ops img{height:28px;max-width:112px;object-fit:contain;opacity:1}
+.cli span{background:#F5F7FB;border-color:#E5EAF2;color:#596C86;font-size:11px;font-weight:750;padding:5px 10px}
+
+/* SHOWCASE — real product framing, sample data clearly marked */
+.dashboard-section{background:#F2F7FF;overflow:hidden}
+.dash-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:center}
+.dash-copy .lead{margin:16px 0 24px}
+.dash-copy .btn{margin-top:27px}
+.dash-benefits{display:grid;gap:14px}
+.dash-benefits>div{display:flex;gap:12px;align-items:center;font-weight:650;font-size:13px;color:#2F4665}
+.checkmark{display:grid;place-items:center;color:#0B967B;background:#DDF7ED;border-radius:50%;width:24px;height:24px;flex-shrink:0;font-weight:850}
+.dashboard-surface{position:relative;border:1px solid #C7D7ED;border-radius:22px;padding:0 12px 12px;background:linear-gradient(160deg,#EAF2FF,#DDEAFB);box-shadow:0 39px 62px -40px rgba(11,50,107,.37)}
+.browser-top{height:39px;display:flex;align-items:center;gap:5px;padding-left:11px}
+.browser-top>span{height:7px;width:7px;border-radius:50%;background:#9EB7D7}
+.browser-top>span:nth-child(2){background:#A8C4E3}
+.browser-top>span:nth-child(3){background:#BBD3EB}
+.browser-top small{margin-left:auto;margin-right:8px;color:#617792;font-size:10px;font-weight:650}
+.dashboard-surface .stmt{box-shadow:0 3px 19px rgba(10,33,78,.07);border-radius:12px;overflow:hidden}
+.dashboard-surface .stmt-tot b{font-size:23px}
+.dashboard-surface .stmt-f{font-size:10px}
+.dashboard-surface .stmt-h{font-size:12px}
+.dashboard-surface .stmt td,.dashboard-surface .stmt th{padding:10px 16px;font-size:12px}
+.preview-disclaimer{text-align:right;color:#6C7E98;font-size:10px;padding:9px 9px 0}
+
+/* CARDS + PRODUCTS */
+.why{gap:16px}
+.why>div{border:1px solid #E6ECF5;padding:28px;border-radius:18px;box-shadow:0 10px 22px -22px #132B50;background:linear-gradient(175deg,#fff 60%,#FBFDFF)}
+.why>div:hover,.it:hover,.steps>div:hover{transform:translateY(-5px);box-shadow:0 18px 34px -26px rgba(14,44,90,.45)}
+.why .k{width:46px;height:46px;background:#EDF4FF;border:1px solid #DCEAFF;color:#246BFD;border-radius:13px;font-size:14px;font-weight:800}
+.why>div:nth-child(3n+2) .k{background:#E7F9F6;border-color:#D3F2EB;color:#0C9A87}
+.why h3{font-size:18px;letter-spacing:-.035em;margin-bottom:9px}
+.why p{font-size:13.5px;line-height:1.78}
+.plat{gap:70px}
+.opsl>div{border:1px solid #E4ECF5;border-radius:12px;box-shadow:0 5px 12px -12px #334B66;background:#fff}
+.opsl>div b{font-size:13.5px}
+.opsl>div span{font-size:11.5px}
+.dev b{font-size:13.5px}.dev p{font-size:12.5px;line-height:1.7}
+.code{border:1px solid #1D3764;border-radius:18px;background:#061C41;box-shadow:0 33px 60px -40px rgba(5,26,58,.6)}
+.code-h{background:#102D58;color:#ACC4E6}
+.code pre{font-size:12.5px}
+.fam{grid-template-columns:235px 1fr;gap:35px;padding-block:35px}
+.fam h3{font-size:25px;line-height:1.2;letter-spacing:-.045em}
+.fam .fd{font-size:13.5px;line-height:1.8}
+.items{gap:12px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.it{padding:23px 20px;border-radius:17px;gap:7px;border:1px solid #E3EAF5;box-shadow:0 10px 26px -24px #162C4D;min-width:0;transition:transform .2s,box-shadow .2s}
+.it-icon{display:grid;place-items:center;width:46px;height:46px;background:linear-gradient(180deg,#F3F8FF,#E6F0FF);color:#246BFD;border:1px solid #DCEAFF;border-radius:14px;margin-bottom:10px;box-shadow:0 10px 24px -18px rgba(36,107,253,.55)}
+.it-icon svg{width:22px;height:22px}
+.it:nth-child(3n+2) .it-icon{background:linear-gradient(180deg,#F0FDFA,#E0F7F1);color:#079D81;border-color:#CFF1E7}
+.it:nth-child(3n) .it-icon{background:linear-gradient(180deg,#FFF8EC,#FFF1D7);color:#C27A02;border-color:#F5E3B9}
+.it b{font-size:14px;line-height:1.35;letter-spacing:-.026em}
+.it p{font-size:12.5px;line-height:1.75}
+.it .tag{font-size:10px;margin-top:9px}
+
+/* QR AND CHAT  */
+.band{background:#F2F7FD}
+.feat{gap:76px;padding-block:92px}
+.qr,.chat{border:1px solid #E5ECF5;box-shadow:0 31px 52px -32px rgba(16,47,90,.34);border-radius:25px}
+.qr{transform:rotate(-1.5deg)}
+.qr .code6{color:#246BFD}
+.qr-note{text-align:center;font-size:10px;color:#8090A5;margin-bottom:13px}
+.chat{transform:rotate(-1deg)}
+.msg{font-size:12px}
+.msg.me{background:#246BFD}
+.band .btn-white{background:#246BFD}
+.band .btn-outline-w:hover{background:#EDF5FF}
+.pts{gap:20px}
+.pts>div{font-size:12.5px;line-height:1.65}
+.pts b{font-size:13.2px}
+.steps{gap:18px}
+.steps>div{padding:30px;border-radius:18px;box-shadow:0 8px 21px -22px #1E3556;transition:transform .2s,box-shadow .2s}
+.steps>div::before{background:#E8F2FF;color:#2265E6;font-family:var(--headfont);font-size:18px;width:44px;height:44px}
+.steps h3{font-size:17px}
+.steps p{font-size:13.5px;line-height:1.8}
+
+/* SECTORS — human-centered, photography plus product clarity */
+.sectors-intro{display:grid;grid-template-columns:1fr .82fr;gap:62px;align-items:center;margin-bottom:37px}
+.sectors-heading{max-width:670px}
+.sectors-heading .lead{margin-top:22px}
+.team-frame{position:relative;border-radius:24px;overflow:hidden;height:255px;box-shadow:0 25px 46px -30px rgba(21,40,86,.34)}
+.team-frame img{width:100%;height:100%;object-fit:cover;object-position:55% 44%;display:block}
+.team-frame:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,24,53,.6))}
+.team-frame span{position:absolute;bottom:18px;left:20px;right:15px;z-index:1;color:#fff;font-weight:750;font-size:13px;line-height:1.4}
+.sect{gap:12px}
+.sect>div{background:#fff;border-radius:17px;padding:22px 18px;box-shadow:0 7px 18px -21px #122F5E;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.sect h3{font-size:15px;letter-spacing:-.03em;margin:0}
+.sect p{font-size:12px;line-height:1.58;margin:0;color:#637790}.sector-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(180deg,#F3F8FF,#E8F1FF);border:1px solid #DCE9FD;color:#246BFD}.sector-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.conf{background:linear-gradient(125deg,#071B3B 15%,#123C78 90%);padding:60px;border-radius:27px;gap:60px}
+.conf .h2{color:#fff}
+.conf .eyebrow{color:#A5F5DE;background:rgba(255,255,255,.09)}
+.conf .lead{color:#C6D8EE}
+.chk>div{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.13);border-radius:14px}
+.chk b{font-size:13px}.chk p{font-size:12px;line-height:1.68}
+.faq{max-width:900px}
+.faq details{border-radius:13px;border-color:#E1EAF5}
+.faq summary{font-size:14px}
+.faq details p{font-size:13.5px}
+.ct{gap:90px}
+.ir{grid-template-columns:104px 1fr}
+.form{border-radius:23px;box-shadow:0 24px 55px -38px rgba(6,37,86,.32);padding:35px}
+.form h3{font-size:23px}
+.form .btn-navy{background:#246BFD;color:#fff;border-color:#246BFD}
+.form .btn-navy:hover{background:#1652CA}
+.form .fn{font-size:11px}
+footer{background:#071B3B;padding-block:66px 29px}
+footer .logo img{height:64px;background:#fff;border-radius:7px;padding:4px}
+footer h4{font-size:13px}
+footer li a{font-size:12.5px}
+footer .fdesc{font-size:12.5px}
+footer .fbot{font-size:11.5px}
+
+@media(max-width:1180px){
+ .nl a{padding:9px 7px;font-size:12px}
+ nav .wrap{gap:10px}.nr{gap:7px}
+ .logo-t{font-size:15px}
+ .hero .wrap{gap:38px}
+ .hero h1{font-size:clamp(42px,4.7vw,57px)}
+ .hero-visual{height:515px;margin-left:8px}
+ .dash-layout{gap:43px}
+ .feat{gap:40px}
+}
+@media(max-width:1024px){
+ .nl{display:none}.burger{display:block}.nav-cta{display:inline-flex}
+ .hero .wrap{grid-template-columns:1fr 1fr;gap:30px}
+ .hero-visual{height:475px}
+ .hero h1{font-size:clamp(38px,4.6vw,48px)}
+ .hero p{font-size:14px}
+ .hero .btn{font-size:12px;padding:11px 16px}
+ .hero-mark{font-size:9px}
+ .payment-toast{left:-24px;bottom:32px;min-width:0}
+ .payment-toast strong{font-size:17px}
+ .dash-layout{gap:30px}
+ .fam{grid-template-columns:190px 1fr;gap:24px}
+ .items{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sectors-intro{gap:32px}
+ .sect{grid-template-columns:repeat(3,1fr)}
+ .feat{grid-template-columns:1fr 1fr}
+ .feat .pts{grid-template-columns:1fr 1fr}
+ .ct{gap:44px}
+}
+@media(max-width:760px){
+ nav .wrap{height:72px}
+ .logo img{height:43px}
+ .logo-t{font-size:15px}
+ .logo-s{font-size:9px}
+ .nav-cta{display:none}
+ .hero .wrap{display:grid;grid-template-columns:1fr;gap:44px;padding-block:58px 60px}
+ .hero h1{font-size:clamp(39px,9vw,59px);letter-spacing:-.063em;max-width:14ch}
+ .hero p{font-size:14.5px;line-height:1.8;max-width:56ch}
+ .hero-actions{margin-bottom:34px;gap:9px}
+ .hero .btn{font-size:12px}
+ .hero-facts{display:flex;gap:0}
+ .hf{padding:2px 12px;flex:1}
+ .hf b{font-size:17px}.hf span{font-size:9.5px}
+ .hero-visual{height:370px;margin-left:20px;margin-right:11px}
+ .hero-img-frame{border-radius:23px}
+ .payment-toast{bottom:20px;left:-21px;min-width:230px;padding:11px 13px;gap:8px}
+ .payment-tick{width:33px;height:33px;flex-basis:33px;font-size:15px}
+ .payment-toast strong{font-size:17px}
+ .payment-toast small{font-size:9px}
+ .hero-mark{top:17px;right:-11px;max-width:93%;white-space:normal;font-size:8px}
+ .trust .wrap{display:flex;flex-direction:column;border-bottom:1px solid var(--line);align-items:stretch}
+ .tcol{padding:22px 0}
+ .tcol+.tcol{padding:19px 0 24px;border:0;border-top:1px solid var(--line)}
+ .ops{gap:15px}.ops img{height:23px;max-width:90px}
+ .cli{gap:6px}.cli span{font-size:10px}
+ .sec{padding-block:72px}
+ .h2{font-size:clamp(30px,7.6vw,42px)}
+ .lead{font-size:14px}
+ .dash-layout{grid-template-columns:1fr;gap:36px}
+ .dashboard-surface{max-width:600px;width:100%;margin:auto}
+ .why{grid-template-columns:1fr;gap:12px}
+ .why>div{padding:24px}
+ .plat,.feat,.ct,.conf{grid-template-columns:1fr;gap:36px}
+ .code{position:static}
+ .fam{grid-template-columns:1fr;gap:23px}
+ .items{grid-template-columns:1fr 1fr}
+ .feat:nth-child(2) .chat{order:2}
+ .feat:nth-child(2)>div:nth-child(2){order:1}
+ .sectors-intro{grid-template-columns:1fr;gap:26px}
+ .team-frame{height:265px}
+ .sect{grid-template-columns:1fr 1fr}
+ .steps{grid-template-columns:1fr}
+ .conf{padding:32px 25px;border-radius:20px}
+ .ir{grid-template-columns:95px 1fr}
+ .form{padding:24px}
+ .fg4{grid-template-columns:1fr 1fr;gap:30px}
+}
+@media(max-width:450px){
+ .wrap{padding-inline:20px}
+ .lang button{padding:5px 8px}
+ .hero h1{font-size:39px}
+ .hero .btn{padding:12px 13px}
+ .hero-visual{height:345px}
+ .hf{padding-inline:8px}.hf b{font-size:15px}.hf span{font-size:8.7px}
+ .ops img{max-width:80px}
+ .items{grid-template-columns:1fr}
+ .stmt-tot{gap:7px;padding:10px}.stmt-tot>div{padding:10px}
+ .dashboard-surface .stmt-tot b{font-size:17px}
+ .dashboard-surface .stmt td,.dashboard-surface .stmt th{padding:8px 7px;font-size:9px}
+ .dashboard-surface .stmt td small{font-size:9px;margin-left:3px}
+ .dashboard-surface .stmt-h{padding:11px 8px;font-size:10px}
+ .dashboard-surface .stmt-f{padding:10px;font-size:9px;line-height:1.5}
+ .dashboard-surface{padding-inline:8px}
+ .sect{grid-template-columns:1fr}
+ .fg4{grid-template-columns:1fr 1fr;gap:24px 12px}
+ .mobile a{font-size:20px}
+ .ir{grid-template-columns:1fr;gap:3px}
+}
+@media(prefers-reduced-motion:reduce){.hero-img-frame,.payment-toast,.hero-mark,.qr,.chat{transform:none!important}.pulse-dot,.live i{animation:none!important}}
+
+
+/* V6: partner hierarchy, Mobile Money first, prepaid airtime as a separate service */
+.hero .drc-pill{background:#EAF5FC;border:1px solid #CBE0F3;color:#174A74;font-size:12px;font-weight:750;padding:8px 13px;box-shadow:0 6px 15px -14px #174A74}
+.hero .drc-pill span{color:#174A74}
+
+.partners-strip{padding:28px 0 36px;border-bottom:1px solid var(--line);background:var(--paper)}
+.partners-strip .wrap{display:block;border:0}
+.partners-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:20px}
+.partners-intro h2{font-size:22px;letter-spacing:-.035em;line-height:1.2}
+.partners-intro .client-intro{margin-bottom:6px}
+.partners-intro p{font-size:13px;color:var(--muted);max-width:375px;text-align:right;line-height:1.6}
+.partner-logo-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:13px}
+.partner-logo-row img{object-fit:contain;width:100%;height:82px;border-radius:13px;background:#fff;padding:17px 16px;border:1px solid #E5ECF5;box-shadow:0 4px 17px -14px rgba(18,43,82,.2)}
+.payment-networks{background:linear-gradient(180deg,#F4F8FF,#F9FBFF 88%)}
+.section-overline{display:flex;align-items:center;gap:11px;font-size:11px;font-weight:850;letter-spacing:.085em;color:#35639E;margin-bottom:25px}
+.step-pill{border-radius:9px;background:#0C3373;color:white;padding:5px 9px;letter-spacing:0}
+.step-pill.light{background:#E7F4FF;color:#245A99}
+.payment-networks .plat{grid-template-columns:1.12fr .88fr;gap:54px;align-items:start}
+.payment-networks .eyebrow{margin-bottom:15px;background:#E0EEFF}
+.payment-networks .h2{font-size:clamp(32px,3.3vw,43px);margin-bottom:13px}
+.payment-networks .lead{font-size:15px;line-height:1.7;margin-bottom:24px}
+.payment-types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 23px}
+.payment-type{display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #DDE8F8;border-radius:13px;padding:12px 15px;box-shadow:0 8px 22px -21px rgba(15,53,105,.45)}
+.payment-type b{display:block;color:#183251;font-size:13.5px}
+.payment-type small{display:block;font-size:11px;color:#6B7E99;margin-top:1px}
+.type-icon{width:37px;height:37px;flex:0 0 37px;display:grid;place-items:center;border-radius:10px}
+.type-icon svg{width:18px;height:18px}
+.type-icon.green{background:#DBF8ED;color:#087D69}
+.type-icon.blue{background:#E7F0FF;color:#246BFD}
+.mm-label{color:#3B526F;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.09em;margin-bottom:11px}
+.mobile-network-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.mobile-network{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:14px;background:#fff;border:1px solid #DDE7F4;border-radius:15px;min-width:0;box-shadow:0 10px 24px -24px rgba(25,56,101,.38)}
+.network-head{display:flex;align-items:center;gap:12px}.network-img{display:flex;align-items:center;justify-content:center;flex:0 0 88px;width:88px;height:56px;background:#fff;border-radius:12px;border:1px solid #EFF3F9;padding:6px}
+.network-img img{width:100%;height:100%;object-fit:contain}
+.mobile-network b{display:block;color:#14294A;font-weight:780;font-size:13px;line-height:1.36}
+.mobile-network span{display:block;color:#6182A5;font-size:10px;margin-top:4px}.service-chips{display:flex;flex-wrap:wrap;gap:8px}.service-chips span{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;background:#EEF4FF;border:1px solid #D7E5FD;color:#2451A6;font-size:11px;font-weight:750}.service-chips span.bulk{background:#EAFBF4;border-color:#CDEEDB;color:#047857}
+.network-footnote{color:#6C7F99;font-size:11px;line-height:1.5;margin-top:12px}
+.payment-dev{padding-top:50px}
+.payment-dev .code{position:relative;top:auto;box-shadow:0 23px 55px -30px rgba(6,26,63,.4)}
+.payment-dev .code pre{font-size:11.5px;line-height:1.77;padding:20px;white-space:pre;}
+.dev-mini{display:flex;gap:12px;align-items:flex-start;padding:18px 20px;background:#fff;margin-top:18px;border:1px solid #E2EAF4;border-radius:15px}
+.dev-mini-icon{width:37px;height:37px;flex:0 0 37px;display:grid;place-items:center;border-radius:11px;background:#E9F1FF;color:#246BFD}
+.dev-mini-icon svg{width:21px;height:21px}
+.dev-mini b{font-weight:800;font-size:13px;color:#183357}
+.dev-mini p{font-size:12px;color:#617692;line-height:1.6;margin-top:4px}
+.airtime-divider{height:1px;background:#DFE7F4;margin:56px 0 34px}
+.airtime-panel{display:grid;grid-template-columns:1fr 1fr;gap:55px;align-items:center;padding:33px 36px;border-radius:24px;border:1px solid #DAE8F3;background:#fff;box-shadow:0 20px 45px -39px rgba(17,53,101,.4)}
+.airtime-panel .section-overline{color:#6A839E;margin-bottom:13px;font-size:10px}
+.airtime-panel h3{font-size:28px;letter-spacing:-.05em;color:#102A50;margin-bottom:12px}
+.airtime-panel p{font-size:13px;line-height:1.7;color:#61758F}
+.airtime-features{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+.airtime-features span{display:inline-block;background:#F1F6FB;border:1px solid #E5ECF6;border-radius:999px;padding:5px 10px;color:#436078;font-weight:700;font-size:10px}
+.airtime-networks{background:#F6F9FD;border-radius:17px;padding:19px 21px;border:1px solid #E7EDF5}
+.airtime-label{text-transform:uppercase;font-weight:800;font-size:10px;letter-spacing:.075em;color:#667B96;margin-bottom:12px}
+.airtime-brand-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.telco-logo-card{min-height:74px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #E3EAF3;border-radius:14px;padding:10px}.telco-logo-card img{max-width:100%;max-height:48px;object-fit:contain}
+.airtime-networks p{font-size:10.5px;margin-top:12px;line-height:1.55}
+@media(max-width:1024px){
+  .payment-networks .plat{grid-template-columns:1fr 1fr;gap:23px}
+  .payment-type{padding:10px}
+  .network-img{flex-basis:58px;width:58px}
+  .mobile-network{gap:10px;padding:11px}
+  .mobile-network b{font-size:11px}
+  .airtime-panel{gap:23px;padding:27px}
+}
+@media(max-width:760px){
+  .partners-intro{display:block;margin-bottom:16px}
+  .partners-intro p{text-align:left;max-width:none;margin-top:7px;font-size:12px}
+  .partner-logo-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+  .partner-logo-row img{height:64px;padding:11px 12px}
+  .payment-networks .plat{display:grid;grid-template-columns:1fr;gap:18px}
+  .payment-networks .h2{font-size:clamp(29px,7.2vw,39px)}
+  .payment-networks .lead{font-size:14px}
+  .payment-dev{padding-top:0}
+  .payment-dev .code pre{font-size:11px}
+  .airtime-panel{grid-template-columns:1fr;gap:20px;padding:23px 20px}
+  .airtime-panel h3{font-size:24px}
+  .airtime-divider{margin:44px 0 26px}
+  .mobile-network{padding:10px}
+  .network-img{width:65px;flex-basis:65px}
+}
+@media(max-width:450px){
+  .mobile-network-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .mobile-network{display:flex;flex-direction:column;justify-items:start;gap:9px}
+  .network-img{width:100%;height:48px;display:flex;flex-basis:auto}
+  .network-img img{max-width:100px}
+  .payment-types{grid-template-columns:1fr;gap:8px}
+  .payment-type{gap:8px;padding:9px}
+  .type-icon{width:32px;height:32px;flex-basis:32px}
+  .payment-type b{font-size:12px}
+  .payment-type small{font-size:9.4px}
+  .partner-logo-row img{padding:10px 6px;height:57px}
+}
+
+/* V7: embedded documentation-first API integration studio */
+#api-tests{scroll-margin-top:95px}
+.api-studio{background:#fff;border:1px solid #D7E4F5;border-radius:24px;overflow:hidden;box-shadow:0 24px 62px -40px rgba(14,48,97,.55)}
+.api-studio-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 19px;background:#0B2754;color:#DDEBFF}
+.api-studio-title{display:flex;gap:7px;align-items:center;font:750 11px/1.35 'Inter',sans-serif;letter-spacing:.035em}
+.api-status-dot{height:8px;width:8px;background:#4CE6C1;border-radius:50%;box-shadow:0 0 0 4px rgba(76,230,193,.1)}
+.api-slash{color:#6384B0}
+.api-demo-badge{font-size:10px;color:#AEEADA;border:1px solid rgba(161,241,213,.2);border-radius:99px;padding:3px 8px;white-space:nowrap}
+.api-studio-body{padding:24px}
+.api-studio-intro h3{font:800 23px/1.2 'Manrope',sans-serif;letter-spacing:-.05em;color:#142C50}
+.api-studio-intro p{color:#60748E;font-size:12px;line-height:1.65;margin-top:8px}
+.api-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:20px}
+.api-field{display:grid;gap:6px;min-width:0}
+.api-field label{font-size:11px;font-weight:750;color:#415C7E}
+.api-field select,.api-field input{width:100%;min-width:0;height:43px;background:#F7FAFF;color:#152E51;padding:9px 10px;border:1px solid #DDE7F4;border-radius:11px;outline-offset:2px;font:600 12px/1.3 'Inter',sans-serif}
+.api-field select:focus-visible,.api-field input:focus-visible{outline:2px solid #246BFD}
+.api-preview-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:21px;padding:9px 13px 8px;background:#0C2751;color:#BED1EF;font-size:10.5px;font-weight:750;border-radius:13px 13px 0 0}
+.api-preview-mark{color:#6BEACB;font-size:9px;font-weight:800;white-space:nowrap}
+.api-plan{margin:0;background:#081D3D;color:#D6E7FF;line-height:1.75;font:11.4px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;padding:15px 16px;border-radius:0 0 13px 13px;white-space:pre-wrap;overflow-wrap:anywhere;min-height:210px}
+.api-button-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.api-prepare,.api-swagger-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;min-height:42px;border-radius:10px;padding:10px 13px;font:750 11.5px/1.3 'Inter',sans-serif;cursor:pointer}
+.api-prepare{background:#EAF2FF;border:1px solid #CDDFFF;color:#194DA4}
+.api-prepare:hover{background:#DAE9FF}
+.api-swagger-link{background:#246BFD;color:#fff;border:1px solid #246BFD;box-shadow:0 8px 17px -12px #246BFD}
+.api-swagger-link:hover{background:#1057E2}
+.api-disclaimer{font-size:10.6px;line-height:1.65;margin-top:17px;color:#73849B;padding-left:11px;border-left:3px solid #D9E5F6}
+.faq-api-link,.it-inline-link{color:#246BFD;text-decoration:underline;text-underline-offset:3px;font-weight:750}
+.it-inline-link{margin-top:8px;font-size:12px;align-self:flex-start}
+@media(max-width:1100px){.api-studio-body{padding:19px}.api-field-grid{gap:9px}.api-swagger-link,.api-prepare{flex:1}.api-plan{font-size:10.5px}}
+@media(max-width:700px){.api-studio-intro h3{font-size:21px}.api-field-grid{gap:12px}.api-studio-body{padding:17px}}
+@media(max-width:360px){.api-field-grid{grid-template-columns:1fr}.api-swagger-link,.api-prepare{width:100%}}
+
+/* fix: operator cards overflow on narrow phones */
+.network-head>div{min-width:0}.network-head>div *{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:430px){.mobile-network-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
-<!-- UTILITY BAR -->
+<a class="skip-link" href="#main-content">Aller au contenu</a>
 <div class="ut"><div class="wrap">
-  <div class="ut-l">
-    <span>1 bis Avenue Lukusa, Gombe — Kinshasa, RDC</span>
-    <a href="tel:+243815459302">(+243) 815 459 302</a>
-    <a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a>
-  </div>
-  <div class="bcc-pill"><span class="bcc-dot"></span><span data-i18n="ut_pill">Agréé BCC — Agrégateur de paiements électroniques</span></div>
+  <div class="ut-l"><span>1 bis Av. Lukusa, Gombe — Kinshasa</span><a href="tel:+243815459302">+243 815 459 302</a><a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a></div>
 </div></div>
 
-<!-- NAV -->
-<nav id="navbar"><div class="wrap">
-  <a href="#" class="logo-mark" aria-label="PRYMO DRC">
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" fill="rgba(0,184,122,.1)"/><path d="M8 24V8h9a7 7 0 010 14H8" stroke="#00B87A" stroke-width="2.2" stroke-linecap="square"/><circle cx="24" cy="20" r="3" fill="#00B87A"/></svg>
-    <div class="logo-text">PRYMO<span>.</span>DRC</div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#about" data-i18n="nav_about">Qui nous sommes</a></li>
-    <li><a href="#solutions" data-i18n="nav_sol">Solutions</a></li>
-    <li><a href="#clients" data-i18n="nav_cli">Clients</a></li>
-    <li><a href="#why" data-i18n="nav_why">Pourquoi nous</a></li>
-    <li><a href="#contact">Contact</a></li>
+<nav><div class="wrap">
+  <a href="#top" class="logo" aria-label="PRYMO DR Congo"><img src="assets/prymo-logo.png" alt="PRYMO DR Congo"></a>
+  <ul class="nl">
+    <li><a href="#why" data-i18n="n1">Pourquoi PRYMO</a></li>
+    <li><a href="#platform" data-i18n="n2">Plateforme</a></li>
+    <li><a href="#solutions" data-i18n="n3">Solutions</a></li>
+    <li><a href="#api-tests" data-i18n="api_nav">API &amp; tests</a></li>
+    <li><a href="#clients" data-i18n="n4">Clients</a></li>
+    <li><a href="#support" data-i18n="n5">Support</a></li>
+    <li><a href="#faq">FAQ</a></li>
   </ul>
-  <div class="nav-r">
+  <div class="nr">
     <div class="lang"><button class="lang-btn active" onclick="switchLang('fr')">FR</button><button class="lang-btn" onclick="switchLang('en')">EN</button></div>
-    <a href="#contact" class="btn-g" data-i18n="nav_cta">Demander une démo</a>
+    <a href="#contact" class="nav-cta" data-i18n="cta">Demander une démo</a>
     <button class="burger" aria-label="Menu" onclick="document.querySelector('.mobile').classList.add('open')"><span></span><span></span><span></span></button>
   </div>
 </div></nav>
 <div class="mobile">
-  <button class="close" aria-label="Fermer" onclick="this.parentElement.classList.remove('open')">&#10005;</button>
-  <a href="#about" data-i18n="nav_about">Qui nous sommes</a>
-  <a href="#solutions" data-i18n="nav_sol">Solutions</a>
-  <a href="#clients" data-i18n="nav_cli">Clients</a>
-  <a href="#why" data-i18n="nav_why">Pourquoi nous</a>
-  <a href="#contact">Contact</a>
+  <button class="x" aria-label="Fermer" onclick="this.parentElement.classList.remove('open')">&#10005;</button>
+  <a href="#why" data-i18n="n1">Pourquoi PRYMO</a><a href="#platform" data-i18n="n2">Plateforme</a><a href="#solutions" data-i18n="n3">Solutions</a><a href="#api-tests" data-i18n="api_nav">API &amp; tests</a><a href="#clients" data-i18n="n4">Clients</a><a href="#support" data-i18n="n5">Support</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
   <div class="lang"><button class="lang-btn active" onclick="switchLang('fr')">FR</button><button class="lang-btn" onclick="switchLang('en')">EN</button></div>
 </div>
 
-<!-- HERO -->
-<section class="hero" id="top">
-  <div class="hero-grid"></div><div class="hero-glow"></div>
-  <div class="wrap"><div class="hero-inner">
-    <div class="eyebrow" data-i18n="hero_ey">Infrastructure de paiement · Afrique centrale</div>
-    <h1 data-i18n-html="hero_h1">La couche de paiement<br><span class="lo">unifiée</span> pour<br><span class="hi">la RDC</span></h1>
-    <p class="hero-sub" data-i18n="hero_sub">Agréé par la Banque Centrale du Congo, PRYMO DRC connecte les entreprises, les banques et les opérateurs télécoms à travers les 26 provinces via une plateforme d'agrégation unique et sécurisée.</p>
-    <div class="hero-actions">
-      <a href="#solutions" class="btn-lg-g" data-i18n="hero_b1">Découvrir nos solutions</a>
-      <a href="#contact" class="btn-lg-o" data-i18n="hero_b2">Demander une démo →</a>
+<main id="main-content"><section class="hero" id="top"><div class="wrap">
+  <div>
+    <div class="eyebrow" data-i18n="h_ey">Agrégateur de paiements électroniques · RDC</div>
+    <h1 data-i18n-html="h_h1">Tout le mobile money congolais, derrière <span class="hi">une seule intégration</span></h1>
+    <p data-i18n="h_p">Encaissez, décaissez et exécutez vos bulk disbursements sur M-Pesa, Airtel Money, Orange Money et AfriMoney, en francs congolais et en dollars, via une API, un portail web ou l'USSD.</p>
+    <div class="drc-pill"><img src="assets/COD_2x.png" alt="Drapeau de la RDC"><span data-i18n="drc_pill">Basé à Kinshasa · République Démocratique du Congo</span></div>
+    <div class="hero-actions"><a href="#solutions" class="btn btn-white" data-i18n="h_b1">Découvrir les solutions</a><a href="#contact" class="btn btn-outline-w" data-i18n="h_b2">Parler à un expert</a></div>
+    <div class="hero-facts">
+      <div class="hf"><b class="num">4</b><span data-i18n="hf1">Réseaux mobile money</span></div>
+      <div class="hf"><b class="num">26/26</b><span data-i18n="hf2">Provinces couvertes</span></div>
+      <div class="hf"><b>CDF · USD</b><span data-i18n="hf3">Soldes séparés</span></div>
     </div>
-  </div></div>
-</section>
-
-<!-- STATS -->
-<div class="stats"><div class="wrap">
-  <div class="st"><div class="st-n"><span>26</span></div><div class="st-l" data-i18n="st1">Provinces couvertes</div></div>
-  <div class="st"><div class="st-n" data-i18n-html="st2n">Dep. <span>2017</span></div><div class="st-l" data-i18n="st2">Fondée à Kinshasa</div></div>
-  <div class="st"><div class="st-n"><span>4</span></div><div class="st-l" data-i18n="st3">Réseaux Mobile Money</div></div>
-  <div class="st"><div class="st-n"><span>24/7</span></div><div class="st-l" data-i18n="st4">Disponibilité</div></div>
-  <div class="st"><div class="st-n">CEMAC</div><div class="st-l" data-i18n="st5">Expansion régionale</div></div>
-</div></div>
-
-<!-- COMPLIANCE -->
-<div class="comp" id="compliance"><div class="wrap">
-  <div class="comp-l">
-    <div class="comp-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
-    <p class="comp-p" data-i18n-html="comp_p"><strong>Prymo DR Congo SARL</strong> est un agrégateur de paiements électroniques agréé et régulé par la <strong>Banque Centrale du Congo (BCC)</strong>. Dispositif LBC/FT et KYC appliqué à chaque transaction.</p>
   </div>
-  <div class="comp-tags">
-    <div class="ctag" data-i18n="tag1">Agréé BCC</div>
-    <div class="ctag">AML / KYC</div>
-    <div class="ctag">Mobile Money</div>
-    <div class="ctag">API · USSD</div>
+  <div class="hero-visual" aria-label="Commerce et paiement mobile">
+    <div class="hero-img-frame"><img class="hero-img" src="assets/prymo-merchant.webp" alt="Commerçante utilisant son téléphone dans sa boutique, visuel d’illustration" width="1056" height="724" fetchpriority="high" decoding="async"></div>
+    <div class="payment-toast" aria-label="Aperçu illustratif d'un paiement confirmé">
+      <span class="payment-tick" aria-hidden="true">✓</span><span><small data-i18n="hv_pay">Paiement reçu · Exemple</small><strong>+ 125 000 CDF</strong><small data-i18n="hv_succ">Transaction confirmée</small></span>
+    </div>
+    <div class="hero-mark"><span class="pulse-dot"></span><span data-i18n="hv_stack">M-Pesa · Airtel Money · Orange Money · AfriMoney</span></div>
   </div>
-</div></div>
+</div></section>
 
-<!-- CLIENTS -->
-<div class="clients" id="clients"><div class="wrap">
-  <div class="cli-lbl" data-i18n="cli_lbl">Ils font confiance à PRYMO DRC</div>
-  <div class="logos-row">
-    <div class="logo-c"><div class="lc-n">FINCA</div><div class="lc-s" data-i18n="cl1">Microfinance</div></div>
-    <div class="logo-c"><div class="lc-n">First Bank</div><div class="lc-s">DRC</div></div>
-    <div class="logo-c"><div class="lc-n">Orange</div><div class="lc-s">RDC</div></div>
-    <div class="logo-c"><div class="lc-n">Africell</div><div class="lc-s" data-i18n="cl4">Télécom</div></div>
-    <div class="logo-c"><div class="lc-n">M-Pesa</div><div class="lc-s">Vodacom</div></div>
-    <div class="logo-c"><div class="lc-n">Sochitel</div><div class="lc-s" data-i18n="cl6">Services télécom</div></div>
+<section class="trust partners-strip" id="clients"><div class="wrap">
+  <div class="partners-intro">
+    <div><div class="client-intro" data-i18n="t_cli">Nos clients</div><h2 data-i18n="client_strip_title">Ils nous font confiance</h2></div>
+    <p data-i18n="client_strip_p">Des institutions financières, entreprises et acteurs télécoms accompagnés par PRYMO en RDC.</p>
   </div>
-</div></div>
+  <div class="partner-logo-row" aria-label="Références clients publiées par PRYMO">
+    <img src="assets/02_Finca.webp" alt="FINCA" loading="lazy">
+    <img src="assets/01_Firstbank_DRC.webp" alt="FirstBank DRC" loading="lazy">
+    <img src="assets/03_Sochitel.webp" alt="Sochitel" loading="lazy">
+    <img src="assets/04_Orange.webp" alt="Orange" loading="lazy">
+    <img src="assets/05_africell.webp" alt="Africell" loading="lazy">
+    <img src="assets/logo-mpesa.png" alt="M-Pesa" loading="lazy">
+  </div>
+</div></section>
 
-<!-- WHY -->
+<section class="sec dashboard-section" id="overview"><div class="wrap">
+  <div class="dash-layout"><div class="dash-copy"><div class="eyebrow" data-i18n="ov_eye">Pilotage des paiements</div>
+    <h2 class="h2" data-i18n-html="ov_title">Vos opérations.<br><span class="brand-gradient">Une seule vue.</span></h2>
+    <p class="lead" data-i18n="ov_p">Suivez vos encaissements et vos décaissements, identifiez les réseaux utilisés et retrouvez les détails de chaque transaction au même endroit.</p>
+    <div class="dash-benefits"><div><span class="checkmark">✓</span><span data-i18n="ov_b1">Suivi des flux C2B et B2C</span></div><div><span class="checkmark">✓</span><span data-i18n="ov_b2">Visibilité distincte sur les soldes CDF et USD</span></div><div><span class="checkmark">✓</span><span data-i18n="ov_b3">Exports et rapprochement des opérations</span></div></div>
+    <a href="#contact" class="btn btn-brand" data-i18n="ov_cta">Découvrir le portail PRYMO</a>
+  </div>
+  <div class="dashboard-surface"><div class="browser-top"><span></span><span></span><span></span><small>app.prymo · Démonstration</small></div>  <div class="stmt" aria-label="Démonstration illustrative du relevé marchand">
+    <div class="stmt-h"><span data-i18n="st_h">Relevé du jour — compte marchand</span><span class="live"><i></i><span data-i18n="st_live">Aperçu</span></span></div>
+    <div class="stmt-tot"><div><small data-i18n="st_c">Collecte CDF</small><b class="num">1 248 500</b></div><div><small data-i18n="st_u">Collecte USD</small><b class="num">3 120,40</b></div></div>
+    <table>
+      <thead><tr><th data-i18n="st_op">Opérateur</th><th data-i18n="st_fl">Flux</th><th style="text-align:right" data-i18n="st_am">Montant</th></tr></thead>
+      <tbody>
+        <tr><td>Vodacom M-Pesa</td><td>C2B<small>CDF</small></td><td class="r in num">+25 000</td></tr>
+        <tr><td>Orange Money</td><td>B2C<small>USD</small></td><td class="r num">−40,00</td></tr>
+        <tr><td>Airtel Money</td><td>C2B<small>CDF</small></td><td class="r in num">+12 000</td></tr>
+        <tr><td>M-Pesa</td><td>Bulk<small>CDF</small></td><td class="r num">−350 000</td></tr>
+      </tbody>
+    </table>
+    <div class="stmt-f"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span data-i18n="st_f">Aperçu fictif · référence DEMO-0042</span></div>
+  </div><div class="preview-disclaimer" data-i18n="ov_demo">Interface illustrative. Montants et transactions fictifs.</div></div>
+  </div>
+</div></section>
+
 <section class="sec" id="why"><div class="wrap">
-  <div class="eyebrow reveal" data-i18n="why_ey">Pourquoi PRYMO DRC</div>
-  <div class="sec-h reveal" data-i18n-html="why_h">Conçu pour les réalités<br>de la finance africaine</div>
-  <p class="sec-p reveal" data-i18n="why_p">Des années d'opération sur le terrain en RDC nous donnent une infrastructure, des partenariats et une position réglementaire qu'aucun acteur international ne peut répliquer.</p>
-  <div class="why-grid reveal">
-    <div class="wc"><div class="wc-n" data-i18n="w1n">01 — Intégration</div><div class="wc-t" data-i18n="w1t">Flexibilité d'intégration</div><p class="wc-b" data-i18n="w1b">API, USSD ou portail web — notre plateforme se connecte à vos systèmes existants sans refonte coûteuse et évolue avec votre croissance.</p></div>
-    <div class="wc"><div class="wc-n" data-i18n="w2n">02 — Expertise</div><div class="wc-t" data-i18n="w2t">Profondément local</div><p class="wc-b" data-i18n="w2b">Fondée à Kinshasa en 2017, notre équipe comprend les usages, les contraintes d'infrastructure et la réalité réglementaire du terrain.</p></div>
-    <div class="wc"><div class="wc-n" data-i18n="w3n">03 — Fiabilité</div><div class="wc-t" data-i18n="w3t">Toujours disponible</div><p class="wc-b" data-i18n="w3b">Une infrastructure redondante et durcie qui soutient des opérations critiques 24/7 à travers les 26 provinces.</p></div>
-    <div class="wc"><div class="wc-n" data-i18n="w4n">04 — Couverture</div><div class="wc-t" data-i18n="w4t">Portée nationale</div><p class="wc-b" data-i18n="w4b">Interconnecté à Airtel Money, Orange Money, M-Pesa et Afrimoney, avec une expansion active vers la zone CEMAC.</p></div>
-    <div class="wc"><div class="wc-n" data-i18n="w5n">05 — Conformité</div><div class="wc-t" data-i18n="w5t">Pleinement agréé</div><p class="wc-b" data-i18n="w5b">Agrégateur autorisé par la BCC. Dispositif LBC/FT et KYC robuste couvrant chaque transaction sous supervision réglementaire.</p></div>
-    <div class="wc"><div class="wc-n" data-i18n="w6n">06 — Règlement</div><div class="wc-t" data-i18n="w6t">Corridors de paiement</div><p class="wc-b" data-i18n="w6b">Des corridors de versement vers plusieurs marchés d'Afrique de l'Ouest et centrale, pour vos partenaires et bénéficiaires hors RDC.</p></div>
+  <div class="sec-head"><div><div class="eyebrow" data-i18n="w_ey">Pourquoi PRYMO</div><h2 class="h2" data-i18n-html="w_h">Une technologie pensée pour<br>les réalités congolaises</h2><p class="lead" data-i18n="w_p">Nos outils fonctionnent pour le commerçant de Kisangani comme pour la banque de Kinshasa. Six engagements, tenus à chaque transaction.</p></div></div>
+  <div class="why">
+    <div><div class="k">01</div><h3 data-i18n="w1t">Technologies flexibles</h3><p data-i18n="w1p">API REST, portail web, traitement par lot ou USSD : la plateforme s'intègre à votre système existant, sans refonte.</p></div>
+    <div><div class="k">02</div><h3 data-i18n="w2t">Approche locale</h3><p data-i18n="w2p">Des parcours simples, en français et en anglais, utilisables sans smartphone. Nous connaissons les usages de nos utilisateurs.</p></div>
+    <div><div class="k">03</div><h3 data-i18n="w3t">Suivi des transactions</h3><p data-i18n="w3p">Traçabilité des opérations et suivi des statuts pour faciliter les rapprochements et limiter le risque d'erreurs de traitement.</p></div>
+    <div><div class="k">04</div><h3 data-i18n="w4t">26 provinces</h3><p data-i18n="w4p">En ville comme en zone rurale, grâce aux quatre grands réseaux mobile money du pays.</p></div>
+    <div><div class="k">05</div><h3 data-i18n="w5t">Conformité</h3><p data-i18n="w5p">KYC, LBC/FT, environnements de test et exigences de sécurité intégrés aux opérations.</p></div>
+    <div><div class="k">06</div><h3 data-i18n="w6t">Tenue en charge</h3><p data-i18n="w6p">Des milliers d'opérations traitées chaque jour, sans dégradation aux heures de pointe.</p></div>
   </div>
 </div></section>
 
-<!-- SOLUTIONS -->
-<section class="sec sec-alt" id="solutions"><div class="wrap">
-  <div class="eyebrow reveal" data-i18n="sol_ey">Nos solutions</div>
-  <div class="sec-h reveal" data-i18n="sol_h">Une pile de paiement complète</div>
-  <p class="sec-p reveal" data-i18n="sol_p">De l'agrégation Mobile Money aux intégrations API d'entreprise — chaque produit est conçu pour un déploiement à l'échelle africaine.</p>
-  <div class="sol-grid reveal">
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h4l3 10 3-10h4"/><path d="M2 12h20"/></svg></div><div class="sc-t" data-i18n="s1t">Intégration API</div><p class="sc-d" data-i18n="s1d">Une API REST unique et sécurisée — documentée, versionnée et éprouvée en production sur tous les opérateurs de la RDC.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 7l7-5 7 5M5 17l7 5 7-5"/></svg></div><div class="sc-t" data-i18n="s2t">Collecte de paiements</div><p class="sc-d" data-i18n="s2d">Encaissez depuis les quatre réseaux Mobile Money via un point d'intégration unique, avec rapprochement automatique.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M14 5l7 7-7 7"/></svg></div><div class="sc-t" data-i18n="s3t">Paiements de masse</div><p class="sc-d" data-i18n="s3d">Versements en volume vers les portefeuilles mobiles — salaires, pensions, commissions, aides — avec suivi et reporting.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16M10 3L8 21M16 3l-2 18"/></svg></div><div class="sc-t" data-i18n="s4t">Solution USSD</div><p class="sc-d" data-i18n="s4d">Menus interactifs depuis n'importe quel mobile — y compris les téléphones basiques, sans dépendance à Internet.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M3 10h18M8 15h3"/></svg></div><div class="sc-t" data-i18n="s5t">Portail web</div><p class="sc-d" data-i18n="s5d">Plateforme de gestion d'entreprise pour les opérations en masse, le reporting et le contrôle des comptes.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3M21 21h-3M21 14v3"/></svg></div><div class="sc-t" data-i18n="s6t">QR & lien de paiement</div><p class="sc-d" data-i18n="s6d">Encaissement marchand par QR code ou lien de paiement, sans intégration technique côté commerçant.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div><div class="sc-t" data-i18n="s7t">Reçus & reporting</div><p class="sc-d" data-i18n="s7d">Reçus automatisés et rapports de transactions auditables pour une traçabilité financière complète.</p></div>
-    <div class="sc"><div class="sc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="2" fill="var(--bg2)"/><circle cx="16" cy="12" r="2" fill="var(--bg2)"/><circle cx="10" cy="18" r="2" fill="var(--bg2)"/></svg></div><div class="sc-t" data-i18n="s8t">Sur mesure</div><p class="sc-d" data-i18n="s8d">Développement spécifique, cadré précisément sur vos exigences techniques et opérationnelles.</p></div>
-  </div>
-</div></section>
-
-<!-- ABOUT -->
-<section class="sec" id="about"><div class="wrap"><div class="about-grid">
-  <div>
-    <div class="eyebrow reveal" data-i18n="ab_ey">Qui nous sommes</div>
-    <div class="sec-h reveal" style="margin-bottom:20px" data-i18n="ab_h">L'agrégateur de paiements de référence en RDC</div>
-    <p class="ab-body reveal" data-i18n="ab_p1">Fondée en 2017, PRYMO DRC est une plateforme d'agrégation financière agréée par la Banque Centrale du Congo et basée à Kinshasa. Nous opérons à l'intersection des infrastructures télécoms, de la technologie financière et de l'innovation dans les paiements — en unifiant l'expérience financière mobile de la RDC pour les entreprises, les PME et les particuliers.</p>
-    <p class="ab-body reveal" data-i18n="ab_p2">Nous avons traité des millions de transactions de crédit mobile et de transferts Mobile Money, réduisant la fracture financière entre zones urbaines et rurales grâce à une intégration profonde avec les opérateurs nationaux.</p>
-    <div class="ab-quote reveal"><p data-i18n="ab_q">« Devenir l'agrégateur et le fournisseur de solutions de paiement numérique de référence en Afrique centrale — en construisant des services fluides pour les marchés sous-desservis. »</p></div>
-  </div>
-  <div class="reveal">
-    <div class="ir"><div class="ik" data-i18n="i1k">Siège social</div><div class="iv">1 bis Avenue Lukusa, Gombe, Kinshasa, RDC<br>B.P. CT1254</div></div>
-    <div class="ir"><div class="ik" data-i18n="i2k">Entité légale</div><div class="iv">Prymo DR Congo SARL</div></div>
-    <div class="ir"><div class="ik" data-i18n="i3k">Régulateur</div><div class="iv" data-i18n-html="i3v">Banque Centrale du Congo (BCC)<br>Agrégateur de paiements électroniques agréé</div></div>
-    <div class="ir"><div class="ik" data-i18n="i4k">Couverture</div><div class="iv" data-i18n-html="i4v">Les 26 provinces de la RDC<br>Expansion vers la zone CEMAC en cours</div></div>
-    <div class="ir"><div class="ik" data-i18n="i5k">Téléphone</div><div class="iv"><a href="tel:+243815459302">(+243) 815 459 302</a></div></div>
-    <div class="ir"><div class="ik">Email</div><div class="iv"><a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a></div></div>
-  </div>
-</div></div></section>
-
-<!-- CONTACT -->
-<section class="sec sec-alt" id="contact"><div class="wrap"><div class="contact-grid">
-  <div>
-    <div class="eyebrow reveal" data-i18n="ct_ey">Nous contacter</div>
-    <div class="sec-h reveal" data-i18n-html="ct_h">Prêt à construire<br>avec nous ?</div>
-    <p class="sec-p reveal" data-i18n="ct_p">Notre équipe cadre votre solution, organise une démonstration technique ou répond à vos questions de conformité. Réponse sous 24 heures.</p>
-    <div class="reveal">
-      <div class="ir"><div class="ik" data-i18n="i1k">Siège social</div><div class="iv">1 bis Avenue Lukusa, Gombe<br>Kinshasa — RDC</div></div>
-      <div class="ir"><div class="ik" data-i18n="i5k">Téléphone</div><div class="iv"><a href="tel:+243815459302">(+243) 815 459 302</a></div></div>
-      <div class="ir"><div class="ik">Email</div><div class="iv"><a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a></div></div>
+<section class="sec sec-soft payment-networks" id="platform"><div class="wrap">
+  <div class="section-overline"><span class="step-pill">01</span><span data-i18n="mm_overline">NOTRE SPÉCIALITÉ · PAIEMENTS MOBILES</span></div>
+  <div class="plat">
+    <div>
+      <div class="eyebrow" data-i18n="mm_ey">Mobile Money · service principal</div>
+      <h2 class="h2" data-i18n-html="mm_title">Une seule plateforme pour<br><span class="brand-gradient">le Mobile Money en RDC</span></h2>
+      <p class="lead" data-i18n="mm_desc">Centralisez vos encaissements, vos décaissements et vos bulk disbursements via les principaux services Mobile Money du pays, depuis votre API ou le portail PRYMO.</p>
+      <div class="payment-types" aria-label="Types de transactions Mobile Money">
+        <div class="payment-type"><span class="type-icon green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 10l7-7 7 7"/></svg></span><span><b>C2B</b><small data-i18n="mm_c2b">Encaisser les paiements</small></span></div>
+        <div class="payment-type"><span class="type-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 14l7 7 7-7"/></svg></span><span><b>B2C</b><small data-i18n="mm_b2c">Effectuer les versements</small></span></div>
+        <div class="payment-type"><span class="type-icon" style="background:#ECFDF5;color:#047857" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/><path d="m17 16 2 2 3-3"/></svg></span><span><b data-i18n="mm_bulk_t">Bulk</b><small data-i18n="mm_bulk">Salaires, primes, dotations</small></span></div>
+      </div>
+      <div class="mm-label" data-i18n="mm_networks">Services Mobile Money actifs</div>
+      <div class="mobile-network-grid">
+        <div class="mobile-network"><div class="network-head"><div class="network-img"><img src="assets/logo-mpesa.png" alt="M-Pesa"></div><div><b>M-Pesa</b><span data-i18n="mm_mpesa">Service Mobile Money · Réseau Vodacom</span></div></div><div class="service-chips"><span>C2B</span><span>B2C</span><span class="bulk">Bulk</span></div></div>
+        <div class="mobile-network"><div class="network-head"><div class="network-img"><img src="assets/logo-orange.png" alt="Orange Money"></div><div><b>Orange Money</b><span data-i18n="mm_orange">Service Mobile Money · Réseau Orange</span></div></div><div class="service-chips"><span>C2B</span><span>B2C</span><span class="bulk">Bulk</span></div></div>
+        <div class="mobile-network"><div class="network-head"><div class="network-img"><img src="assets/logo-airtel.png" alt="Airtel Money"></div><div><b>Airtel Money</b><span data-i18n="mm_airtel">Service Mobile Money · Réseau Airtel</span></div></div><div class="service-chips"><span>C2B</span><span>B2C</span><span class="bulk">Bulk</span></div></div>
+        <div class="mobile-network"><div class="network-head"><div class="network-img"><img src="assets/logo-afrimoney.png" alt="AfriMoney"></div><div><b>AfriMoney</b><span data-i18n="mm_afrimoney">Service Mobile Money · Réseau Africell</span></div></div><div class="service-chips"><span>C2B</span><span>B2C</span><span class="bulk">Bulk</span></div></div>
+      </div>
+      <p class="network-footnote" data-i18n="mm_note">Les services activés dépendent du contrat et de l'environnement de test ou de production autorisé.</p>
+    </div>
+    <div class="payment-dev" id="api-tests">
+      <div class="api-studio" aria-label="Préparation des scénarios API PRYMO">
+        <div class="api-studio-head"><span class="api-studio-title"><span class="api-status-dot"></span>PRYMO API <span class="api-slash">/</span> <span data-i18n="api_lab">Atelier d'intégration</span></span><span class="api-demo-badge" data-i18n="api_demo">Démo locale</span></div>
+        <div class="api-studio-body">
+          <div class="api-studio-intro"><h3 data-i18n="api_h">Préparez votre scénario de test</h3><p data-i18n="api_p">Choisissez un flux et un réseau pour préparer un jeu de données fictives, puis consultez Swagger pour les véritables routes et paramètres.</p></div>
+          <div class="api-field-grid">
+            <div class="api-field"><label for="api-flow" data-i18n="api_flow">Opération</label><select id="api-flow"><option value="C2B" data-i18n="api_c2b">Encaissement · C2B</option><option value="B2C" data-i18n="api_b2c">Décaissement · B2C</option><option value="BULK" data-i18n="api_bulk">Bulk disbursement</option></select></div>
+            <div class="api-field"><label for="api-operator" data-i18n="api_provider">Réseau Mobile Money</label><select id="api-operator"><option value="M-Pesa">M-Pesa</option><option value="Airtel Money">Airtel Money</option><option value="Orange Money">Orange Money</option><option value="AfriMoney">AfriMoney</option></select></div>
+            <div class="api-field"><label for="api-currency" data-i18n="api_currency">Devise</label><select id="api-currency"><option value="CDF">CDF</option><option value="USD">USD</option></select></div>
+            <div class="api-field"><label for="api-amount" data-i18n="api_amount">Montant fictif</label><input id="api-amount" type="number" min="1" max="10000000" step="1" value="25000" inputmode="numeric"></div>
+          </div>
+          <div class="api-preview-head"><span data-i18n="api_preview">Plan de test · pas une requête API</span><span class="api-preview-mark">LOCAL / DEMO</span></div>
+          <pre class="api-plan" id="api-test-plan" aria-live="polite"></pre>
+          <div class="api-button-row"><button type="button" class="api-prepare" id="api-prepare" data-i18n="api_generate">Préparer le scénario</button><a class="api-swagger-link" href="https://tppdrc.myone4all.com/api/docs#" target="_blank" rel="noopener noreferrer"><span data-i18n="api_open">Consulter la documentation API</span><span aria-hidden="true">↗</span></a></div>
+          <p class="api-disclaimer" data-i18n="api_disclaimer">Aucune transaction ni requête réseau n'est envoyée depuis ce site. Swagger fait foi pour l'authentification, les routes, les champs, les réponses et les environnements autorisés. N'insérez jamais de clés API sur une page publique.</p>
+        </div>
+      </div>
+      <div class="dev-mini">
+        <span class="dev-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l4-4 4 4M7 4v12M21 16l-4 4-4-4M17 20V8"/></svg></span>
+        <div><b data-i18n="mm_dev_h">Conçu pour votre système</b><p data-i18n="mm_dev_p">API, notifications, portefeuilles CDF/USD et rapprochement des transactions.</p></div>
+      </div>
     </div>
   </div>
-  <div class="form reveal">
-    <h3 data-i18n="fm_h">Demander une démonstration</h3>
-    <p class="form-sub" data-i18n="fm_sub">Les champs marqués d'un * sont obligatoires.</p>
-    <form id="contactForm" action="https://formsubmit.co/infos@prymodrc.com" method="POST">
-      <input type="hidden" name="_subject" id="emailSubject" value="Nouvelle demande depuis prymodrc.com">
-      <input type="hidden" name="_next" value="https://prymodrc.com/#contact">
-      <input type="hidden" name="_captcha" value="true">
-      <input type="hidden" name="_template" value="table">
-      <input type="text" name="_honey" style="display:none">
-      <div class="row">
-        <div class="fg"><label data-i18n="f_name">Nom complet *</label><input type="text" name="name" required data-i18n-ph="f_name_ph" placeholder="Votre nom"></div>
-        <div class="fg"><label data-i18n="f_co">Entreprise *</label><input type="text" name="company" required data-i18n-ph="f_co_ph" placeholder="Nom de l'entreprise"></div>
+  <div class="airtime-divider"></div>
+  <div class="airtime-panel" id="telecom">
+    <div class="airtime-description">
+      <div class="section-overline"><span class="step-pill light">02</span><span data-i18n="airtime_overline">SERVICE COMPLÉMENTAIRE · TÉLÉCOM PRÉPAYÉ</span></div>
+      <h3 data-i18n="airtime_title">Airtime &amp; Data prépayés</h3>
+      <p data-i18n="airtime_desc">La distribution de crédit téléphonique et de forfaits internet est distincte des encaissements, décaissements et bulk disbursements Mobile Money.</p>
+      <div class="airtime-features"><span data-i18n="airtime_feature1">Recharges prépayées</span><span data-i18n="airtime_feature2">Forfaits Data</span><span data-i18n="airtime_feature3">SMS selon service</span></div>
+    </div>
+    <div class="airtime-networks" aria-label="Opérateurs télécoms de recharges prépayées">
+      <div class="airtime-label" data-i18n="airtime_networks">Opérateurs télécoms</div>
+      <div class="airtime-brand-grid"><div class="telco-logo-card"><img src="assets/logo-vodacom.png" alt="Vodacom"></div><div class="telco-logo-card"><img src="assets/logo-airtel.png" alt="Airtel"></div><div class="telco-logo-card"><img src="assets/logo-orange.png" alt="Orange"></div><div class="telco-logo-card"><img src="assets/logo-africell.png" alt="Africell"></div></div>
+      <p data-i18n="airtime_note">Produits disponibles selon les opérateurs et les accords en vigueur.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="solutions"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow" data-i18n="s_ey">Solutions</div><h2 class="h2" data-i18n-html="s_h">Encaisser, payer, fidéliser</h2><p class="lead" data-i18n="s_p">Des solutions pour encaisser, effectuer vos paiements et gérer vos opérations. Les services télécom prépayés sont présentés séparément.</p></div></div>
+
+  <div class="fam">
+    <div><div class="lbl">01</div><h3 data-i18n="f1h">Encaisser et payer</h3><p class="fd" data-i18n="f1d">Le cœur de la plateforme : collectes, versements et traçabilité, sur les quatre réseaux.</p></div>
+    <div class="items">
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16v11H4zM8 4v4M16 4v4M4 12h16"/></svg></span><b data-i18n="i1b">Intégration API</b><p data-i18n="i1p">Un point d'entrée pour encaisser (C2B), décaisser (B2C) et gérer les bulk disbursements, selon les services activés.</p><a class="it-inline-link" href="#api-tests" data-i18n="api_see">Préparer une intégration ↗</a></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 15h3"/></svg></span><b data-i18n="i2b">Portail web</b><p data-i18n="i2p">Collecte, versements et airtime sans développement. Validation à deux niveaux, exports Excel et PDF.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/><path d="m16 16 2 2 4-4"/></svg></span><b data-i18n="i3b">Paiements en lot</b><p data-i18n="i3p">Salaires, pensions, commissions ou décaissements de crédit en une seule opération, avec suivi.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM10 17h4"/></svg></span><b data-i18n="i4b">Solution USSD</b><p data-i18n="i4p">Des services accessibles depuis n'importe quel téléphone, sans connexion internet.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-8-4-8-11a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 7-8 11-8 11z"/></svg></span><b data-i18n="i5b">Collecte de fonds</b><p data-i18n="i5p">Paroisses, ONG, écoles : contributions mobiles suivies en temps réel, reçu pour chaque don.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><b data-i18n="i6b">Reçus officiels</b><p data-i18n="i6p">Reçus numériques à numérotation unique, archivés et vérifiables, pour administrations et entreprises.</p></div>
+    </div>
+  </div>
+
+  <div class="fam">
+    <div><div class="lbl">02</div><h3 data-i18n="f2h">Parcours marchand</h3><p class="fd" data-i18n="f2d">Encaissement marchand et paiement à distance, sans complexité technique.</p></div>
+    <div class="items">
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 15 8M8 8h.01M16 14h.01"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg></span><b data-i18n="i8b">Lien de paiement</b><p data-i18n="i8p">À distance, partagé par WhatsApp ou SMS, sans site internet.</p><span class="tag soon" data-i18n="soon">Bientôt</span></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 15h5"/></svg></span><b data-i18n="i7b">Portail marchand</b><p data-i18n="i7p">Suivi des encaissements, historique et rapprochement depuis une interface simple.</p><span class="tag soon" data-i18n="soon">Bientôt</span></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h3"/></svg></span><b data-i18n="i9b">Code de paiement</b><p data-i18n="i9p">Pour les parcours de paiement assistés ou de proximité.</p><span class="tag soon" data-i18n="soon">Bientôt</span></div>
+    </div>
+  </div>
+
+  <div class="fam">
+    <div><div class="lbl">03</div><h3 data-i18n="f3h">Engagement et télécom</h3><p class="fd" data-i18n="f3d">Produits distribués et opérés avec les opérateurs télécoms.</p></div>
+    <div class="items">
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16M4 12h16M4 16h10"/></svg></span><b data-i18n="i10b">Airtime, data et SMS</b><p data-i18n="i10p">Recharge prépayée, forfaits internet et SMS selon les offres opérateurs. Ces produits ne sont pas des transferts Mobile Money.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg></span><b data-i18n="i11b">Application mobile</b><p data-i18n="i11p">Envoyer, recevoir et payer depuis son téléphone, avec un historique clair de chaque opération.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM8 4h8v3M8 13h8"/></svg></span><b data-i18n="i12b">Cartes promotionnelles</b><p data-i18n="i12p">Cartes et bons promotionnels pour animer vos ventes, avec suivi des utilisations.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12M6 12h12M6 16h8"/><path d="M12 3v3M12 18v3"/></svg></span><b>Promo Couronne</b><p data-i18n="i13p">Programme promotionnel clé en main : mécaniques de gains et statistiques de participation.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="7"/></svg></span><b data-i18n="i14b">Services SVA</b><p data-i18n="i14p">Contenus, abonnements et services interactifs opérés avec les télécoms, facturés par l'opérateur.</p></div>
+      <div class="it"><span class="it-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h11"/><path d="m17 16 2 2 3-3"/></svg></span><b data-i18n="i15b">Sur mesure</b><p data-i18n="i15p">Un besoin spécifique ? Atelier de cadrage, puis accompagnement jusqu'au lancement.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<div class="band">
+  <div class="wrap">
+    <div class="feat" id="support">
+      <div class="chat">
+        <div class="ch"><span>PRYMO Support</span><span data-i18n="ch_on">Compte professionnel · en ligne</span></div>
+        <div class="msg me" data-i18n-html="m1">Bonjour, statut de la transaction TPP-123456 ?<small>14:31</small></div>
+        <div class="msg bot" data-i18n-html="m2"><span class="ref">TPP-123456</span><br>Décaissement — Airtel Money<br>Montant : 50 000 CDF<br>Bénéficiaire : +243 •••• ••1234<br><span class="st">En attente de confirmation</span><br>Évitez de relancer ce paiement pour le moment.<small>14:31</small></div>
+        <div class="msg me" data-i18n-html="m3">Transmettre au support<small>14:32</small></div>
+        <div class="msg bot" data-i18n-html="m4">Demande transmise à notre équipe avec les informations déjà fournies. Référence : <span class="ref">SUP-8F2K</span><small>14:32</small></div>
       </div>
-      <div class="row">
-        <div class="fg"><label data-i18n="f_mail">Email professionnel *</label><input type="email" name="email" required placeholder="nom@entreprise.com"></div>
-        <div class="fg"><label data-i18n="f_ph">Téléphone</label><input type="tel" name="phone" placeholder="+243 ..."></div>
+      <div>
+        <div class="eyebrow"><span data-i18n="s_ey2">Support WhatsApp</span>&nbsp;·&nbsp;<span data-i18n="pilot">Pilote</span></div>
+        <h2 class="h2" data-i18n-html="su_h">Le statut d'une transaction,<br>en un message</h2>
+        <p class="lead" data-i18n="su_p">Vos équipes écrivent au chatbot PRYMO sur WhatsApp avec ce qu'elles ont sous la main : une référence, ou simplement l'opérateur, le montant, le numéro et l'heure. Elles obtiennent le statut, et basculent vers un conseiller en un message.</p>
+        <div class="pts">
+          <div><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><div><b data-i18n="u1b">Recherche intelligente</b><span data-i18n="u1p">Par référence ou par critères.</span></div></div>
+          <div><svg class="i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 018 0v4"/></svg><div><b data-i18n="u2b">Accès contrôlé</b><span data-i18n="u2p">Numéros autorisés par votre administrateur, sur vos seules transactions.</span></div></div>
+          <div><svg class="i" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><div><b data-i18n="u3b">Lecture seule</b><span data-i18n="u3p">Le bot consulte ; il ne modifie, n'annule ni ne relance rien.</span></div></div>
+          <div><svg class="i" viewBox="0 0 24 24"><path d="M12 3a4 4 0 110 8 4 4 0 010-8zM4 21a8 8 0 0116 0"/></svg><div><b data-i18n="u4b">Relais humain</b><span data-i18n="u4p">Cas non résolu transmis au support avec référence, sans ressaisie.</span></div></div>
+          <div><svg class="i" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14"/><path d="M4 10h16"/></svg><div><b data-i18n="u5b">Données protégées</b><span data-i18n="u5p">Numéros masqués ; ni solde, ni PIN, ni OTP ne transitent.</span></div></div>
+          <div><svg class="i" viewBox="0 0 24 24"><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/><circle cx="12" cy="12" r="9"/></svg><div><b data-i18n="u6b">Français et anglais</b><span data-i18n="u6p">Menu guidé dans la langue de votre équipe.</span></div></div>
+        </div>
+        <p style="margin-top:28px"><a href="#contact" class="btn btn-outline-w" data-i18n="su_cta">Participer au pilote</a></p>
       </div>
-      <div class="fg"><label data-i18n="f_serv">Service souhaité</label>
-        <select name="service">
-          <option value="" data-i18n="f_sel">Sélectionnez un service</option>
-          <option data-i18n="s1t">Intégration API</option>
-          <option data-i18n="s2t">Collecte de paiements</option>
-          <option data-i18n="s3t">Paiements de masse</option>
-          <option data-i18n="s4t">Solution USSD</option>
-          <option data-i18n="s5t">Portail web</option>
-          <option data-i18n="s6t">QR & lien de paiement</option>
-          <option data-i18n="s8t">Sur mesure</option>
-        </select>
-      </div>
-      <div class="fg"><label>Message</label><textarea name="message" data-i18n-ph="f_msg_ph" placeholder="Décrivez brièvement votre besoin..."></textarea></div>
-      <button type="submit" class="btn-lg-g" data-i18n="f_send">Envoyer la demande</button>
-    </form>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="start"><div class="wrap">
+  <div class="sec-head"><div><div class="eyebrow" data-i18n="g_ey">Démarrer</div><h2 class="h2" data-i18n-html="g_h">De la prise de contact<br>au premier paiement</h2></div></div>
+  <div class="steps">
+    <div><h3 data-i18n="g1t">Échange et cadrage</h3><p data-i18n="g1p">Nous analysons votre activité, vos volumes et vos canaux pour choisir les services et les opérateurs à activer.</p></div>
+    <div><h3 data-i18n="g2t">Sandbox et intégration</h3><p data-i18n="g2p">Vérification KYC, ouverture du compte et des portefeuilles CDF/USD, clés de test pour intégrer en sécurité.</p></div>
+    <div><h3 data-i18n="g3t">Mise en production</h3><p data-i18n="g3p">Clé live liée à vos adresses IP, formation de vos équipes et suivi des premières transactions à vos côtés.</p></div>
+  </div>
+</div></section>
+
+<section class="sec sec-soft" id="sectors"><div class="wrap">
+  <div class="sectors-intro"><div class="sectors-heading"><div class="eyebrow" data-i18n="k_ey">Secteurs</div><h2 class="h2" data-i18n="k_h">Au service de toute l'économie congolaise</h2><p class="lead" data-i18n="sector_intro">Des paiements mobiles au service des entreprises, institutions, fintechs et commerces congolais.</p></div><div class="team-frame"><img src="assets/prymo-team.webp" alt="Équipe professionnelle travaillant sur des solutions numériques, visuel d’illustration" width="1052" height="724" loading="eager" decoding="async"><span data-i18n="team_caption">Pour les entreprises d'ici, à l'échelle de la RDC.</span></div></div>
+  <div class="sect">
+    <div><span class="sector-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10l9-5 9 5"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8"/><path d="M3 18h18"/></svg></span><h3 data-i18n="k1t">Banques et IMF</h3><p data-i18n="k1p">Crédits, remboursements et bulk disbursements.</p></div>
+    <div><span class="sector-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/></svg></span><h3>Fintechs</h3><p data-i18n="k2p">Une API pour connecter les principaux services Mobile Money.</p></div>
+    <div><span class="sector-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h18v11H3z"/><path d="M7 7V5h10v2"/><path d="M3 12h18"/></svg></span><h3 data-i18n="k3t">Commerce</h3><p data-i18n="k3p">Paiements marchands, encaissements et fidélisation.</p></div>
+    <div><span class="sector-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 11c0 5.65-7 10-7 10Z"/><path d="M8 4h8"/></svg></span><h3 data-i18n="k4t">ONG et églises</h3><p data-i18n="k4p">Dons mobiles, contributions et suivi des collectes.</p></div>
+    <div><span class="sector-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><h3 data-i18n="k5t">Institutions</h3><p data-i18n="k5p">Taxes, frais, reçus et traçabilité des encaissements.</p></div>
+  </div>
+</div></section>
+
+<section class="sec" id="compliance"><div class="wrap"><div class="conf">
+  <div><div class="eyebrow" data-i18n="c_ey">Conformité</div><h2 class="h2" data-i18n-html="c_h2">Votre argent mérite<br>un cadre exigeant</h2><p class="lead" data-i18n="c_p">La sécurité, la traçabilité et la conformité sont intégrées à chaque transaction, pas ajoutées après coup.</p><p style="margin-top:24px"><a href="#contact" class="btn btn-ghost" data-i18n="c_cta">Demander le dossier de conformité</a></p></div>
+  <div class="chk">
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><b data-i18n="c1b">Agrément Banque Centrale du Congo</b><p data-i18n="c1p">Agrégateur de systèmes de paiement électronique. Entité : Prymo DR Congo SARL.</p></div></div>
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><b>KYC &amp; LBC/FT</b><p data-i18n="c2p">Identification des clients et lutte contre le blanchiment sur chaque compte.</p></div></div>
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><b data-i18n="c3b">Devises strictement séparées</b><p data-i18n="c3p">Soldes CDF et USD distincts, aucune conversion implicite.</p></div></div>
+    <div><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><b data-i18n="c4b">Test et production isolés</b><p data-i18n="c4p">Vous testez sans jamais toucher à l'argent réel ; la clé live est liée à vos adresses IP.</p></div></div>
   </div>
 </div></div></section>
 
-<!-- FOOTER -->
+<section class="sec sec-soft" id="faq"><div class="wrap">
+  <div class="eyebrow">FAQ</div><h2 class="h2" data-i18n="q_h">Questions fréquentes</h2>
+  <div class="faq" style="margin-top:28px">
+    <details><summary data-i18n="q1">Avec quels opérateurs PRYMO fonctionne-t-il ?</summary><p data-i18n="q1a">Pour le Mobile Money : M-Pesa, Airtel Money, Orange Money et AfriMoney. Les recharges airtime et data dépendent des réseaux Vodacom, Airtel, Orange et Africell selon le service activé.</p></details>
+    <details><summary data-i18n="q2">Puis-je encaisser en francs congolais et en dollars ?</summary><p data-i18n="q2a">Oui. Chaque compte dispose de portefeuilles CDF et USD distincts. La devise est toujours explicite et aucune conversion n'est faite à votre insu.</p></details>
+    <details><summary data-i18n="q3">Mes clients ont-ils besoin d'un smartphone ?</summary><p data-i18n="q3a">Non. Le mobile money et la solution USSD fonctionnent sur tout téléphone. Les liens de paiement et le portail marchand complètent l'offre pour les utilisateurs de smartphone.</p></details>
+    <details><summary data-i18n="q4">Puis-je tester avant de passer en production ?</summary><p data-i18n="q4a">Les essais doivent être réalisés avec un accès de test autorisé par PRYMO, dans l'environnement indiqué dans la documentation API. Vérifiez avec notre équipe les conditions d'activation avant la mise en production.</p></details>
+    <details><summary data-i18n="api_faq_q">Où trouver les routes API et tester les appels ?</summary><p><span data-i18n="api_faq_a">Le contrat technique (routes, méthodes, champs et authentification) est décrit dans la documentation Swagger PRYMO. Demandez d'abord un accès de test autorisé à l'équipe PRYMO et utilisez un environnement non productif.</span> <a href="https://tppdrc.myone4all.com/api/docs#" target="_blank" rel="noopener noreferrer" class="faq-api-link" data-i18n="api_open">Consulter la documentation API</a>.</p></details>
+    <details><summary data-i18n="q5">Que se passe-t-il si j'envoie deux fois le même paiement ?</summary><p data-i18n="q5a">Avant toute nouvelle tentative, vérifiez l'état de la transaction et suivez les règles de reprise décrites dans la documentation API pour éviter les doublons.</p></details>
+    <details><summary data-i18n="q6">Comment fonctionne le support WhatsApp ?</summary><p data-i18n="q6a">Votre administrateur autorise les numéros WhatsApp de votre équipe. Ceux-ci envoient une référence ou quelques détails et reçoivent le statut de la transaction. Si la réponse ne suffit pas, la demande part au support PRYMO avec une référence de suivi.</p></details>
+    <details><summary data-i18n="q7">PRYMO est-il réglementé ?</summary><p data-i18n="q7a">Oui. PRYMO DRC est un agrégateur de systèmes de paiement électronique agréé par la Banque Centrale du Congo, avec un dispositif KYC et LBC/FT.</p></details>
+  </div>
+</div></section>
+
+<section class="sec" id="contact"><div class="wrap"><div class="ct">
+  <div>
+    <div class="eyebrow">Contact</div><h2 class="h2" data-i18n-html="x_h">Prêt à accélérer<br>vos paiements ?</h2>
+    <p class="lead" data-i18n="x_p">Parlez-nous de votre projet. Un conseiller PRYMO vous recontacte sous 24 heures pour organiser une démonstration adaptée à votre activité.</p>
+    <div style="margin-top:28px">
+      <div class="ir"><div class="lbl" data-i18n="x_hq">Siège</div><div>1 bis Avenue Lukusa, Gombe<br>Kinshasa — RDC · B.P. CT1254</div></div>
+      <div class="ir"><div class="lbl" data-i18n="x_ph">Téléphone</div><div><a href="tel:+243815459302">+243 815 459 302</a></div></div>
+      <div class="ir"><div class="lbl">Email</div><div><a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a></div></div>
+      <div class="ir"><div class="lbl">WhatsApp</div><div data-i18n="x_wa">Support par chatbot, clients autorisés</div></div>
+    </div>
+  </div>
+  <form class="form" id="demoForm" action="https://formsubmit.co/infos@prymodrc.com" method="POST">
+    <input type="hidden" name="_subject" id="emailSubject" value="Nouvelle demande de démo — prymodrc.com">
+    <input type="hidden" name="_next" value="https://prymodrc.com/#contact">
+    <input type="hidden" name="_captcha" value="true">
+    <input type="hidden" name="_template" value="table">
+    <input type="text" name="_honey" style="display:none">
+    <h3 data-i18n="fm_h">Demander une démo</h3><p class="fs" data-i18n="fm_s">Les champs marqués d'un * sont obligatoires.</p>
+    <div class="row"><div class="fg"><label for="f_name" data-i18n="f_name">Nom complet *</label><input id="f_name" name="name" required></div><div class="fg"><label for="f_co" data-i18n="f_co">Entreprise *</label><input id="f_co" name="company" required></div></div>
+    <div class="row"><div class="fg"><label for="f_mail" data-i18n="f_mail">E-mail professionnel *</label><input id="f_mail" name="email" type="email" required></div><div class="fg"><label for="f_tel" data-i18n="f_tel">Téléphone</label><input id="f_tel" name="phone" type="tel" placeholder="+243 …"></div></div>
+    <div class="fg"><label for="f_sol" data-i18n="f_sol">Solution qui vous intéresse</label><select id="f_sol" name="service"><option data-i18n="f_sel">Sélectionnez</option><option data-i18n="i1b">Intégration API</option><option data-i18n="i2b">Portail web</option><option data-i18n="i3b">Bulk disbursements</option><option data-i18n="f2h">Parcours marchand</option><option data-i18n="i4b">Solution USSD</option><option data-i18n="i10b">Airtime, data et SMS</option><option data-i18n="s_ey2">Support WhatsApp</option><option data-i18n="i15b">Sur mesure</option></select></div>
+    <div class="fg"><label for="f_msg">Message</label><textarea id="f_msg" name="message"></textarea></div>
+    <button type="submit" class="btn btn-navy" data-i18n="f_send">Envoyer ma demande</button>
+    <p class="fn" data-i18n="f_note">Vos données servent uniquement à vous recontacter.</p>
+      </form>
+</div></div></section>
+
+</main>
 <footer><div class="wrap">
-  <div class="fl">
-    <div class="f-brand">PRYMO<span>.</span>DRC</div>
-    <div class="f-copy" data-i18n="ft_copy">© 2026 Prymo DR Congo SARL — Tous droits réservés</div>
+  <div class="fg4">
+    <div><div class="logo"><img src="assets/prymo-logo.png" alt="PRYMO DR Congo"></div><p class="fdesc" data-i18n="ft_d">Infrastructure de Mobile Money, bulk disbursements et services télécom prépayés pour la RDC.</p></div>
+    <div><h4 data-i18n="n3">Solutions</h4><ul><li><a href="#api-tests" data-i18n="i1b">Intégration API</a></li><li><a href="#solutions" data-i18n="i2b">Portail web</a></li><li><a href="#clients" data-i18n="n4">Clients</a></li><li><a href="#support" data-i18n="s_ey2">Support WhatsApp</a></li><li><a href="#solutions">USSD</a></li><li><a href="https://tppdrc.myone4all.com/api/docs#" target="_blank" rel="noopener noreferrer" data-i18n="api_footer">Documentation API ↗</a></li></ul></div>
+    <div><h4 data-i18n="ft_co">Entreprise</h4><ul><li><a href="#why" data-i18n="n1">Pourquoi PRYMO</a></li><li><a href="#sectors" data-i18n="k_ey">Secteurs</a></li><li><a href="#compliance" data-i18n="c_ey">Conformité</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Contact</a></li></ul></div>
+    <div><h4 data-i18n="ft_lg">Légal</h4><ul><li><a href="#compliance" data-i18n="ft_compliance">Sécurité et conformité</a></li><li><a href="mailto:infos@prymodrc.com?subject=Demande%20d%27informations%20juridiques" data-i18n="ft_legal">Informations juridiques</a></li><li><a href="https://www.linkedin.com/company/prymodrc" target="_blank" rel="noopener">LinkedIn</a></li></ul></div>
   </div>
-  <div class="f-links">
-    <a href="#about" data-i18n="nav_about">Qui nous sommes</a>
-    <a href="#solutions" data-i18n="nav_sol">Solutions</a>
-    <a href="#compliance" data-i18n="ft_comp">Conformité</a>
-    <a href="https://www.linkedin.com/company/prymodrc" target="_blank" rel="noopener">LinkedIn</a>
-  </div>
+  <div class="fbot"><span data-i18n="ft_c">© 2026 Prymo DR Congo SARL — Tous droits réservés</span><span>Kinshasa · RDC</span></div>
 </div></footer>
 
 <script>
-const T={
-fr:{ut_pill:"Agréé BCC — Agrégateur de paiements électroniques",nav_about:"Qui nous sommes",nav_sol:"Solutions",nav_cli:"Clients",nav_why:"Pourquoi nous",nav_cta:"Demander une démo",
-hero_ey:"Infrastructure de paiement · Afrique centrale",hero_h1:'La couche de paiement<br><span class="lo">unifiée</span> pour<br><span class="hi">la RDC</span>',
-hero_sub:"Agréé par la Banque Centrale du Congo, PRYMO DRC connecte les entreprises, les banques et les opérateurs télécoms à travers les 26 provinces via une plateforme d'agrégation unique et sécurisée.",
-hero_b1:"Découvrir nos solutions",hero_b2:"Demander une démo →",
-st1:"Provinces couvertes",st2n:'Dep. <span>2017</span>',st2:"Fondée à Kinshasa",st3:"Réseaux Mobile Money",st4:"Disponibilité",st5:"Expansion régionale",
-comp_p:'<strong>Prymo DR Congo SARL</strong> est un agrégateur de paiements électroniques agréé et régulé par la <strong>Banque Centrale du Congo (BCC)</strong>. Dispositif LBC/FT et KYC appliqué à chaque transaction.',tag1:"Agréé BCC",
-cli_lbl:"Ils font confiance à PRYMO DRC",cl1:"Microfinance",cl4:"Télécom",cl6:"Services télécom",
-why_ey:"Pourquoi PRYMO DRC",why_h:"Conçu pour les réalités<br>de la finance africaine",why_p:"Des années d'opération sur le terrain en RDC nous donnent une infrastructure, des partenariats et une position réglementaire qu'aucun acteur international ne peut répliquer.",
-w1n:"01 — Intégration",w1t:"Flexibilité d'intégration",w1b:"API, USSD ou portail web — notre plateforme se connecte à vos systèmes existants sans refonte coûteuse et évolue avec votre croissance.",
-w2n:"02 — Expertise",w2t:"Profondément local",w2b:"Fondée à Kinshasa en 2017, notre équipe comprend les usages, les contraintes d'infrastructure et la réalité réglementaire du terrain.",
-w3n:"03 — Fiabilité",w3t:"Toujours disponible",w3b:"Une infrastructure redondante et durcie qui soutient des opérations critiques 24/7 à travers les 26 provinces.",
-w4n:"04 — Couverture",w4t:"Portée nationale",w4b:"Interconnecté à Airtel Money, Orange Money, M-Pesa et Afrimoney, avec une expansion active vers la zone CEMAC.",
-w5n:"05 — Conformité",w5t:"Pleinement agréé",w5b:"Agrégateur autorisé par la BCC. Dispositif LBC/FT et KYC robuste couvrant chaque transaction sous supervision réglementaire.",
-w6n:"06 — Règlement",w6t:"Corridors de paiement",w6b:"Des corridors de versement vers plusieurs marchés d'Afrique de l'Ouest et centrale, pour vos partenaires et bénéficiaires hors RDC.",
-sol_ey:"Nos solutions",sol_h:"Une pile de paiement complète",sol_p:"De l'agrégation Mobile Money aux intégrations API d'entreprise — chaque produit est conçu pour un déploiement à l'échelle africaine.",
-s1t:"Intégration API",s1d:"Une API REST unique et sécurisée — documentée, versionnée et éprouvée en production sur tous les opérateurs de la RDC.",
-s2t:"Collecte de paiements",s2d:"Encaissez depuis les quatre réseaux Mobile Money via un point d'intégration unique, avec rapprochement automatique.",
-s3t:"Paiements de masse",s3d:"Versements en volume vers les portefeuilles mobiles — salaires, pensions, commissions, aides — avec suivi et reporting.",
-s4t:"Solution USSD",s4d:"Menus interactifs depuis n'importe quel mobile — y compris les téléphones basiques, sans dépendance à Internet.",
-s5t:"Portail web",s5d:"Plateforme de gestion d'entreprise pour les opérations en masse, le reporting et le contrôle des comptes.",
-s6t:"QR & lien de paiement",s6d:"Encaissement marchand par QR code ou lien de paiement, sans intégration technique côté commerçant.",
-s7t:"Reçus & reporting",s7d:"Reçus automatisés et rapports de transactions auditables pour une traçabilité financière complète.",
-s8t:"Sur mesure",s8d:"Développement spécifique, cadré précisément sur vos exigences techniques et opérationnelles.",
-ab_ey:"Qui nous sommes",ab_h:"L'agrégateur de paiements de référence en RDC",
-ab_p1:"Fondée en 2017, PRYMO DRC est une plateforme d'agrégation financière agréée par la Banque Centrale du Congo et basée à Kinshasa. Nous opérons à l'intersection des infrastructures télécoms, de la technologie financière et de l'innovation dans les paiements — en unifiant l'expérience financière mobile de la RDC pour les entreprises, les PME et les particuliers.",
-ab_p2:"Nous avons traité des millions de transactions de crédit mobile et de transferts Mobile Money, réduisant la fracture financière entre zones urbaines et rurales grâce à une intégration profonde avec les opérateurs nationaux.",
-ab_q:"« Devenir l'agrégateur et le fournisseur de solutions de paiement numérique de référence en Afrique centrale — en construisant des services fluides pour les marchés sous-desservis. »",
-i1k:"Siège social",i2k:"Entité légale",i3k:"Régulateur",i3v:"Banque Centrale du Congo (BCC)<br>Agrégateur de paiements électroniques agréé",i4k:"Couverture",i4v:"Les 26 provinces de la RDC<br>Expansion vers la zone CEMAC en cours",i5k:"Téléphone",
-ct_ey:"Nous contacter",ct_h:"Prêt à construire<br>avec nous ?",ct_p:"Notre équipe cadre votre solution, organise une démonstration technique ou répond à vos questions de conformité. Réponse sous 24 heures.",
-fm_h:"Demander une démonstration",fm_sub:"Les champs marqués d'un * sont obligatoires.",f_name:"Nom complet *",f_name_ph:"Votre nom",f_co:"Entreprise *",f_co_ph:"Nom de l'entreprise",f_mail:"Email professionnel *",f_ph:"Téléphone",f_serv:"Service souhaité",f_sel:"Sélectionnez un service",f_msg_ph:"Décrivez brièvement votre besoin...",f_send:"Envoyer la demande",
-ft_copy:"© 2026 Prymo DR Congo SARL — Tous droits réservés",ft_comp:"Conformité"},
-en:{ut_pill:"BCC Licensed — Electronic Payment Aggregator",nav_about:"Who we are",nav_sol:"Solutions",nav_cli:"Clients",nav_why:"Why us",nav_cta:"Request a demo",
-hero_ey:"Payment infrastructure · Central Africa",hero_h1:'The <span class="lo">unified</span><br>payment layer<br>for <span class="hi">the DRC</span>',
-hero_sub:"Licensed by the Banque Centrale du Congo, PRYMO DRC connects enterprises, banks and telecom operators across all 26 provinces through a single, secure aggregation platform.",
-hero_b1:"Discover our solutions",hero_b2:"Request a demo →",
-st1:"Provinces covered",st2n:'Est. <span>2017</span>',st2:"Founded in Kinshasa",st3:"Mobile Money networks",st4:"Availability",st5:"Regional expansion",
-comp_p:'<strong>Prymo DR Congo SARL</strong> is an authorized electronic payment aggregator regulated by the <strong>Banque Centrale du Congo (BCC)</strong>. Full AML/CFT and KYC framework applied to every transaction.',tag1:"BCC Licensed",
-cli_lbl:"Trusted by leading institutions and operators across the DRC",cl1:"Microfinance",cl4:"Telecom",cl6:"Telecom services",
-why_ey:"Why PRYMO DRC",why_h:"Built for the realities<br>of African finance",why_p:"Years of ground-level operation in the DRC give us infrastructure, partnerships and regulatory standing that no international player can replicate.",
-w1n:"01 — Integration",w1t:"Plug-in flexibility",w1b:"API, USSD or web portal — our platform connects to any existing system without a costly overhaul, scaling cleanly with your growth.",
-w2n:"02 — Expertise",w2t:"Deeply local",w2b:"Founded in Kinshasa in 2017, our team understands user behaviour, infrastructure constraints and the regulatory reality on the ground.",
-w3n:"03 — Reliability",w3t:"Always on",w3b:"Hardened, redundant infrastructure supporting critical operations 24/7 across all 26 provinces.",
-w4n:"04 — Coverage",w4t:"National reach",w4b:"Integrated with Airtel Money, Orange Money, M-Pesa and Afrimoney, with active expansion into the CEMAC zone.",
-w5n:"05 — Compliance",w5t:"Fully licensed",w5b:"BCC-authorized aggregator. Robust AML/CFT and KYC framework covering every transaction under full regulatory oversight.",
-w6n:"06 — Settlement",w6t:"Payout corridors",w6b:"Payout corridors into several West and Central African markets, for your partners and beneficiaries outside the DRC.",
-sol_ey:"Our solutions",sol_h:"A complete payments stack",sol_p:"From Mobile Money aggregation to enterprise API integrations — every product built for African deployment at scale.",
-s1t:"API Integration",s1d:"Single secure REST API — documented, versioned and production-tested across all DRC operators.",
-s2t:"Payment collection",s2d:"Collect from all four Mobile Money networks through a single integration point, with automatic reconciliation.",
-s3t:"Bulk payouts",s3d:"High-volume disbursements to mobile wallets — salaries, pensions, commissions, aid — with tracking and reporting.",
-s4t:"USSD solution",s4d:"Interactive menus from any mobile — including feature phones, with zero internet dependency.",
-s5t:"Web portal",s5d:"Enterprise management platform for bulk operations, reporting and account control.",
-s6t:"QR & payment link",s6d:"Merchant collection by QR code or payment link, with no technical integration on the merchant side.",
-s7t:"Receipts & reporting",s7d:"Automated receipts and audit-ready transaction reports for full financial traceability.",
-s8t:"Tailor-made",s8d:"Custom development scoped precisely to your technical and operational requirements.",
-ab_ey:"Who we are",ab_h:"The DRC's leading payment aggregator",
-ab_p1:"Founded in 2017, PRYMO DRC is a financial aggregation platform licensed by the Banque Centrale du Congo and headquartered in Kinshasa. We operate at the intersection of telecom infrastructure, financial technology and payment innovation — unifying the DRC's mobile financial experience for enterprises, SMEs and individuals.",
-ab_p2:"We have processed millions of mobile airtime transactions and Mobile Money transfers, bridging the financial gap between urban and rural areas through deep national operator integration.",
-ab_q:"“To become the leading aggregator and provider of digital payment solutions in Central Africa — building seamless services for underserved markets.”",
-i1k:"Headquarters",i2k:"Legal entity",i3k:"Regulator",i3v:"Banque Centrale du Congo (BCC)<br>Authorized electronic payment aggregator",i4k:"Coverage",i4v:"All 26 provinces of the DRC<br>CEMAC zone expansion underway",i5k:"Phone",
-ct_ey:"Get in touch",ct_h:"Ready to build<br>with us?",ct_p:"Our team will scope a solution, arrange a technical demo or answer compliance questions. We respond within 24 hours.",
-fm_h:"Request a demonstration",fm_sub:"Fields marked with * are required.",f_name:"Full name *",f_name_ph:"Your name",f_co:"Company *",f_co_ph:"Company name",f_mail:"Business email *",f_ph:"Phone",f_serv:"Service of interest",f_sel:"Select a service",f_msg_ph:"Briefly describe your needs...",f_send:"Send request",
-ft_copy:"© 2026 Prymo DR Congo SARL — All rights reserved",ft_comp:"Compliance"}};
+const T={fr:{},en:{
+api_nav:"API & tests",api_lab:"Integration lab",api_demo:"Local demo",api_h:"Prepare a test scenario",api_p:"Choose a flow and a network to prepare fictional test data, then consult Swagger for actual endpoints and parameters.",api_flow:"Operation",api_c2b:"Collection · C2B",api_b2c:"Payout · B2C",api_bulk:"Bulk disbursement",api_provider:"Mobile Money network",api_currency:"Currency",api_amount:"Example amount",api_preview:"Test plan · not an API request",api_generate:"Prepare scenario",api_open:"Open API documentation",api_disclaimer:"This website sends no transaction or network request. Swagger is the authoritative source for authentication, endpoints, fields, responses and approved environments. Never put API keys on a public web page.",api_see:"Plan an integration ↗",api_faq_q:"Where can I find API endpoints and test calls?",api_faq_a:"The PRYMO Swagger documentation describes endpoints, methods, fields and authentication. First request authorised test access from PRYMO and use a non-production environment.",api_footer:"API documentation ↗",
+
+client_strip_title:"Trusted by organisations across the DRC",client_strip_p:"Financial institutions, businesses and telecom stakeholders working with PRYMO in the DRC.",
+mm_overline:"OUR SPECIALTY · MOBILE PAYMENTS",mm_ey:"Mobile Money · Core service",mm_title:'One platform for<br><span class="brand-gradient">Mobile Money in the DRC</span>',mm_desc:"Manage collections, payouts and bulk disbursements across the country's leading Mobile Money services through PRYMO's API or web portal.",mm_c2b:"Collect payments",mm_b2c:"Make payouts",mm_bulk_t:"Bulk",mm_bulk:"Salaries, bonuses, allowances",mm_networks:"Active Mobile Money services",mm_mpesa:"Mobile Money service · Vodacom network",mm_orange:"Mobile Money service · Orange network",mm_airtel:"Mobile Money service · Airtel network",mm_afrimoney:"Mobile Money service · Africell network",mm_note:"Enabled services depend on your contract and on the authorised test or production environment.",mm_dev_h:"Built for your systems",mm_dev_p:"APIs, notifications, separate CDF/USD wallets and transaction reconciliation.",
+airtime_overline:"ADDITIONAL SERVICE · PREPAID TELECOM",airtime_title:"Prepaid Airtime & Data",airtime_desc:"Prepaid phone credit and internet bundles are a separate service from Mobile Money collections, payouts and bulk disbursements.",airtime_feature1:"Prepaid airtime",airtime_feature2:"Data bundles",airtime_feature3:"SMS depending on service",airtime_networks:"Telecom operators",airtime_note:"Products vary by telecom network and current commercial arrangements.",
+n1:"Why PRYMO",n2:"Platform",n3:"Solutions",n4:"Clients",n5:"Support",cta:"Request a demo",drc_pill:"Based in Kinshasa · Democratic Republic of the Congo",
+h_ey:"Electronic payment aggregator · DRC",h_h1:'All of Congolese mobile money, behind <span class="hi">one integration</span>',
+h_p:"Collect, pay out and run bulk disbursements on M-Pesa, Airtel Money, Orange Money and AfriMoney, in Congolese francs and US dollars, through an API, a web portal or USSD.",
+h_b1:"Explore the solutions",h_b2:"Talk to an expert",hf1:"Mobile money networks",hf2:"Provinces covered",hf3:"Separate balances",
+st_h:"Today's statement — merchant account",st_live:"Preview",st_c:"Collected CDF",st_u:"Collected USD",st_op:"Operator",st_fl:"Flow",st_am:"Amount",st_f:"Illustrative preview · reference DEMO-0042",
+t_ops:"Interconnected networks",t_cli:"Clients",cl_h:"Leading organisations already<br>trust us",cl_p:"Clients trust PRYMO DRC to deliver secure, reliable and efficient digital payment services, driven by professionalism and a strong commitment to customer satisfaction. Here are some of the organisations we work with.",cl_loc_t:"Strong local presence",cl_loc_p:"Based in Kinshasa, PRYMO DRC connects banks, institutions, businesses and merchants to the Congolese mobile money ecosystem.",cl_badge:"Active clients and integrations in the DRC",
+w_ey:"Why PRYMO",w_h:"Technology built for<br>Congolese realities",w_p:"Our tools work for the shopkeeper in Kisangani as for the bank in Kinshasa. Six commitments, kept on every transaction.",
+w1k:"Integration",w1t:"Flexible technology",w1p:"REST API, web portal, batch processing or USSD: the platform plugs into your existing system, with no overhaul.",
+w2k:"Field",w2t:"Local approach",w2p:"Simple journeys, in French and English, usable without a smartphone. We know how our users actually pay.",
+w3k:"Reliability",w3t:"Transaction tracking",w3p:"Transaction tracking and status visibility help reconcile operations and reduce processing errors.",
+w4k:"Coverage",w4t:"26 provinces",w4p:"Urban and rural, through the country's four major mobile money networks.",
+w5k:"Compliance",w5t:"Compliance",w5p:"KYC, AML/CFT, test environments and security requirements integrated into operations.",
+w6k:"Volume",w6t:"Built for load",w6p:"Thousands of operations processed every day, with no degradation at peak hours.",
+p_ey:"Platform",p_h:"One integration,<br>four networks",p_p:"Collect (C2B), pay out (B2C) and process bulk disbursements on the country's main Mobile Money services. Airtime and data remain separate services.",p_afr:"Per service",
+d1:"Dedicated test keys and numbers: integrate without touching real money.",d2t:"Idempotency",d2:"A payment re-sent after a network drop runs only once.",d3t:"Signed webhooks",d3:"HMAC-signed notifications, retried automatically on failure.",d4t:"Protected live keys",d4:"Production access restricted to the IP addresses you declare.",d5t:"Batch payments",d5:"Salaries, bonuses or loan disbursements in one operation.",d6t:"Multi-currency",d6:"Separate CDF and USD wallets, currency always explicit.",c_h:"Example — C2B collection",
+s_ey:"Solutions",s_h:"Collect, pay, engage",s_p:"Solutions to collect funds, make payouts and manage your payments. Prepaid telecom products are presented separately.",
+f1h:"Collect and pay",f1d:"The core of the platform: collections, payouts, bulk disbursements and traceability across the main Mobile Money services.",
+i1b:"API integration",i1p:"One entry point for collections (C2B), payouts (B2C) and bulk disbursements, depending on enabled services.",i2b:"Web portal",i2p:"Collections, payouts and airtime with no development. Two-level approval, Excel and PDF exports.",i3b:"Bulk disbursements",i3p:"Salaries, bonuses, allowances, commissions or loan disbursements in one operation, with tracking.",i4b:"USSD solution",i4p:"Services available from any phone, with no internet connection.",i5b:"Fundraising",i5p:"Parishes, NGOs, schools: mobile contributions tracked in real time, a receipt for every donation.",i6b:"Official receipts",i6p:"Uniquely numbered digital receipts, archived and verifiable, for administrations and businesses.",
+f2h:"Merchant journeys",f2d:"Merchant collection and remote payment, with no technical complexity.",i7b:"Merchant portal",i7p:"Track collections, history and reconciliation from a simple interface.",i8b:"Payment link",i8p:"Remote collections shared on WhatsApp or SMS, with no website needed.",i9b:"Payment code",i9p:"For assisted or in-person payment journeys.",soon:"Coming soon",pilot:"Pilot",
+f3h:"Engagement and telecom",f3d:"Products distributed and operated with the telecom operators.",
+i10b:"Airtime, data and SMS",i10p:"Prepaid airtime, internet bundles and SMS depending on operator offers. These products are not Mobile Money transfers.",i11b:"Mobile app",i11p:"Send, receive and pay from your phone, with a clear history of every operation.",i12b:"Promotional cards",i12p:"Promotional cards and vouchers to drive sales, with redemption tracking.",i13p:"Turnkey promotional programme: winning mechanics and participation statistics.",i14b:"VAS services",i14p:"Content, subscriptions and interactive services operated with telcos, carrier-billed.",i15b:"Tailor-made",i15p:"A specific need? Scoping workshop, then support through to launch.",
+cl_ey:"Clients",cl2_h:"Payment services built<br>for demanding organisations",cl2_p:"Banks, institutions, operators, distributors and businesses choose PRYMO DRC to connect their operations to reliable and efficient digital payment services.",cl21b:"Secure services",cl21p:"Compliance framework, monitoring and traceability.",cl22b:"Reliable execution",cl22p:"Operations designed for volume and continuity.",cl23b:"Professional approach",cl23p:"Operational support and customer satisfaction.",cl24b:"Local footprint in the DRC",cl24p:"Teams and presence adapted to Congolese market realities.",cl_cta:"Talk to our team",
+ch_on:"Business account · online",m1:"Hello, status of transaction TPP-123456?<small>14:31</small>",m2:'<span class="ref">TPP-123456</span><br>Payout — Airtel Money<br>Amount: 50,000 CDF<br>Beneficiary: +243 •••• ••1234<br><span class="st">Awaiting confirmation</span><br>Please do not retry this payment for now.<small>14:31</small>',m3:"Forward to support<small>14:32</small>",m4:'Request forwarded to our team with the details already provided. Reference: <span class="ref">SUP-8F2K</span><small>14:32</small>',
+s_ey2:"WhatsApp support",su_h:"A transaction's status,<br>in one message",su_p:"Your teams message the PRYMO chatbot on WhatsApp with whatever they have at hand: a reference, or simply the operator, amount, number and time. They get the status, and switch to a human adviser in one message.",
+u1b:"Smart search",u1p:"By reference or by criteria.",u2b:"Controlled access",u2p:"Numbers authorised by your administrator, on your transactions only.",u3b:"Read-only",u3p:"The bot looks up; it never modifies, cancels or retries anything.",u4b:"Human hand-off",u4p:"Unresolved cases forwarded to support with a reference, no re-typing.",u5b:"Protected data",u5p:"Masked numbers; no balance, PIN or OTP ever transits.",u6b:"French and English",u6p:"Guided menu in your team's language.",su_cta:"Join the pilot",
+g_ey:"Getting started",g_h:"From first call<br>to first payment",g1t:"Scoping",g1p:"We review your business, volumes and channels to choose the services and operators to enable.",g2t:"Sandbox and integration",g2p:"KYC verification, account and CDF/USD wallet opening, test keys to integrate safely.",g3t:"Go-live",g3p:"Live key bound to your IP addresses, team training and monitoring of your first transactions alongside you.",
+k_ey:"Sectors",k_h:"Serving the whole Congolese economy",k1t:"Banks and MFIs",k1p:"Loans, repayments and bulk disbursements.",k2p:"One API to connect the main Mobile Money services.",k3t:"Retail",k3p:"Merchant payments, collections and loyalty.",k4t:"NGOs and churches",k4p:"Mobile donations, contributions and collection tracking.",k5t:"Institutions",k5p:"Taxes, fees, receipts and collection traceability.",
+c_ey:"Compliance",c_h2:"Your money deserves<br>a rigorous framework",c_p:"Security, traceability and compliance are built into every transaction, not added afterwards.",c_cta:"Request the compliance pack",
+c1b:"Banque Centrale du Congo licence",c1p:"Electronic payment system aggregator. Entity: Prymo DR Congo SARL.",c2p:"Customer identification and anti-money-laundering on every account.",c3b:"Strictly separated currencies",c3p:"Distinct CDF and USD balances, no implicit conversion.",c4b:"Isolated test and production",c4p:"You test without ever touching real money; the live key is bound to your IP addresses.",
+q_h:"Frequently asked questions",q1:"Which operators does PRYMO work with?",q1a:"For Mobile Money: M-Pesa, Airtel Money, Orange Money and AfriMoney. Airtime and data top-ups depend on the Vodacom, Airtel, Orange and Africell networks according to the enabled service.",q2:"Can I collect in Congolese francs and in dollars?",q2a:"Yes. Each account has separate CDF and USD wallets. The currency is always explicit and no conversion is made without your knowledge.",q3:"Do my customers need a smartphone?",q3a:"No. Mobile money and the USSD solution work on any phone. Payment links and the merchant portal complement the offer for smartphone users.",q4:"Can I test before going to production?",q4a:"Tests should use PRYMO-authorised test access in the environment stated in the API documentation. Confirm activation requirements with our team before production.",q5:"What happens if I send the same payment twice?",q5a:"Before retrying, check the transaction status and follow the API documentation's retry guidance to avoid duplicate payments.",q6:"How does WhatsApp support work?",q6a:"Your administrator authorises your team's WhatsApp numbers. They send a reference or a few details and receive the transaction status. If the answer is not enough, the request goes to PRYMO support with a tracking reference.",q7:"Is PRYMO regulated?",q7a:"Yes. PRYMO DRC is an electronic payment system aggregator licensed by the Banque Centrale du Congo, with a KYC and AML/CFT framework.",
+x_h:"Ready to speed up<br>your payments?",x_p:"Tell us about your project. A PRYMO adviser gets back to you within 24 hours to arrange a demonstration suited to your business.",x_hq:"Head office",x_ph:"Phone",x_wa:"Chatbot support, authorised clients",
+fm_h:"Request a demo",fm_s:"Fields marked with * are required.",f_name:"Full name *",f_co:"Company *",f_mail:"Business e-mail *",f_tel:"Phone",f_sol:"Solution of interest",f_sel:"Select",f_send:"Send my request",f_note:"Your details are used only to get back to you.",
+ft_d:"Mobile Money infrastructure, bulk disbursements and prepaid telecom services for the DRC.",ft_co:"Company",ft_lg:"Legal",ft_l1:"Legal notice",ft_l2:"Privacy",ft_l3:"Terms of use",ft_c:"© 2026 Prymo DR Congo SARL — All rights reserved"
+,
+hv_pay:"Payment received · Example",hv_succ:"Payment confirmed",hv_stack:"M-Pesa · Airtel Money · Orange Money · AfriMoney",
+ov_eye:"Payment operations",ov_title:'Your transactions.<br><span class="brand-gradient">One clear view.</span>',ov_p:"Track collections, payouts and bulk disbursements, review activity by mobile money provider and find every transaction in one place.",ov_b1:"Track C2B, B2C and bulk flows",ov_b2:"Separate visibility for CDF and USD wallets",ov_b3:"Exports and transaction reconciliation",ov_cta:"Explore the PRYMO portal",ov_demo:"Illustrative interface. Fictional transactions and amounts.",sector_intro:"Mobile payments for businesses, institutions, fintechs and merchants across the DRC.",team_caption:"Built for local businesses, designed to scale across the DRC.",ft_compliance:"Security and compliance",ft_legal:"Legal information"}};
+// FR dictionary = what is in the HTML
+document.querySelectorAll('[data-i18n]').forEach(el=>{T.fr[el.getAttribute('data-i18n')]??=el.textContent;});
+document.querySelectorAll('[data-i18n-html]').forEach(el=>{T.fr[el.getAttribute('data-i18n-html')]??=el.innerHTML;});
 let currentLang='fr';
 try{if(localStorage.getItem('prymo_lang')==='en')currentLang='en';}catch(e){}
-function switchLang(lang){
-  currentLang=lang;try{localStorage.setItem('prymo_lang',lang);}catch(e){}
-  document.documentElement.lang=lang;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===lang.toUpperCase()));
-  const t=T[lang];
+function switchLang(l){
+  currentLang=l;try{localStorage.setItem('prymo_lang',l);}catch(e){}
+  document.documentElement.lang=l;document.title=l==='fr'?'PRYMO DRC — Mobile Money & services de paiement en RDC':'PRYMO DRC — Mobile money & payment services in the DRC';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===l.toUpperCase()));
+  const t=T[l];
   document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k]!==undefined)el.textContent=t[k];});
   document.querySelectorAll('[data-i18n-html]').forEach(el=>{const k=el.getAttribute('data-i18n-html');if(t[k]!==undefined)el.innerHTML=t[k];});
-  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');if(t[k]!==undefined)el.placeholder=t[k];});
-  document.title=lang==='fr'?"PRYMO DRC — Agrégateur de paiements agréé BCC":"PRYMO DRC — BCC-licensed payment aggregator";
   document.querySelector('.mobile').classList.remove('open');
+  renderApiTestPlan();
 }
-const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}}),{threshold:.1});
-document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+// Demonstration planner only. No network request, endpoint or secret is used here.
+function renderApiTestPlan(){
+  const flow=document.getElementById('api-flow').value;
+  const operator=document.getElementById('api-operator').value;
+  const currency=document.getElementById('api-currency').value;
+  const value=Number(document.getElementById('api-amount').value);
+  const amount=Number.isFinite(value)&&value>=1&&value<=10000000?value:25000;
+  const english=currentLang==='en';
+  const labels=english
+    ?['TEST PLAN (EXAMPLE ONLY)','Flow','Network','Currency','Example amount','Demo reference','Next step','Check required fields, auth and environment in Swagger.']
+    :['PLAN DE TEST (EXEMPLE UNIQUEMENT)','Flux','Réseau','Devise','Montant fictif','Référence de démo','Étape suivante','Vérifier champs, authentification et environnement dans Swagger.'];
+  document.getElementById('api-test-plan').textContent=[
+    `# ${labels[0]}`,
+    `${labels[1]}:         ${flow}`,
+    `${labels[2]}:       ${operator}`,
+    `${labels[3]}:       ${currency}`,
+    `${labels[4]}:  ${amount.toLocaleString(english?'en-US':'fr-FR')}`,
+    `${labels[5]}:  DEMO-${flow}-001`,
+    '',
+    `# ${labels[6]}`,
+    labels[7]
+  ].join('\n');
+}
+document.getElementById('api-prepare').addEventListener('click',renderApiTestPlan);
+for(const fieldId of ['api-flow','api-operator','api-currency','api-amount']){
+  document.getElementById(fieldId).addEventListener('change',renderApiTestPlan);
+}
 document.querySelectorAll('.mobile a').forEach(a=>a.addEventListener('click',()=>document.querySelector('.mobile').classList.remove('open')));
-const sects=document.querySelectorAll('section[id],div.clients[id]'),nl=document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll',()=>{let c='';sects.forEach(s=>{if(window.scrollY>=s.offsetTop-140)c=s.id;});nl.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));});
-document.getElementById('contactForm').addEventListener('submit',()=>{document.getElementById('emailSubject').value=currentLang==='fr'?'Nouvelle demande depuis prymodrc.com':'New request from prymodrc.com';});
+const sects=[...document.querySelectorAll('section[id],.feat[id]')],nl=document.querySelectorAll('.nl a');
+addEventListener('scroll',()=>{let c='';sects.forEach(s=>{if(scrollY>=s.offsetTop-150)c=s.id;});nl.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+c));},{passive:true});
+document.getElementById('demoForm').addEventListener('submit',()=>{document.getElementById('emailSubject').value=currentLang==='fr'?'Nouvelle demande de démo — prymodrc.com':'New demo request — prymodrc.com';});
 switchLang(currentLang);
 </script>
 </body>
