@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demande envoyée — PRYMO DRC</title>
+<meta name="description" content="Confirmation de votre demande de démonstration PRYMO DRC.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="https://prymodrc.com/merci.html">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="pages.css">
+</head>
+<body data-title-fr="Demande envoyée" data-title-en="Request sent">
+<header class="top"><div class="wrap">
+  <a href="/" class="logo"><img src="assets/prymo-logo.png" alt="PRYMO DR Congo"><b>PRYMO DRC</b></a>
+  <div class="top-r"><div class="lang"><button class="lang-btn active" onclick="switchLang('fr')">FR</button><button class="lang-btn" onclick="switchLang('en')">EN</button></div><a href="/" class="back" data-fr="← Retour au site" data-en="← Back to site">← Retour au site</a></div>
+</div></header>
+<main><div class="wrap"><div class="card">
+
+<section data-lang="fr" class="center">
+<div class="ok-badge"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+<h1>Demande bien reçue</h1>
+<p>Merci. Un conseiller PRYMO vous recontacte sous 24 heures ouvrées pour organiser une démonstration adaptée à votre activité.</p>
+<p>Pour une question urgente : <a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a> · +243 815 459 302</p>
+<a href="/" class="btn">Retour à l'accueil</a>
+</section>
+<section data-lang="en" class="center" hidden>
+<div class="ok-badge"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+<h1>Request received</h1>
+<p>Thank you. A PRYMO adviser will get back to you within 24 business hours to arrange a demonstration suited to your business.</p>
+<p>Urgent question: <a href="mailto:infos@prymodrc.com">infos@prymodrc.com</a> · +243 815 459 302</p>
+<a href="/" class="btn">Back to home</a>
+</section>
+</div></div></main>
+<footer><div class="wrap"><span>© 2026 Prymo DR Congo SARL</span><span><a href="mentions-legales.html" data-fr="Mentions légales" data-en="Legal notice">Mentions légales</a><a href="confidentialite.html" data-fr="Confidentialité" data-en="Privacy">Confidentialité</a><a href="cgu.html" data-fr="CGU" data-en="Terms">CGU</a></span></div></footer>
+<script>
+let L='fr';try{if(localStorage.getItem('prymo_lang')==='en')L='en';}catch(e){}
+function switchLang(l){L=l;try{localStorage.setItem('prymo_lang',l);}catch(e){}document.documentElement.lang=l;
+document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.trim()===l.toUpperCase()));
+document.querySelectorAll('[data-lang]').forEach(s=>s.hidden=s.getAttribute('data-lang')!==l);
+document.querySelectorAll('[data-fr]').forEach(e=>e.textContent=e.getAttribute('data-'+l));
+document.title=(l==='fr'?document.body.getAttribute('data-title-fr'):document.body.getAttribute('data-title-en'))+' — PRYMO DRC';}
+switchLang(L);
+</script>
+</body>
+</html>
