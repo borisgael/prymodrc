@@ -1,8 +1,8 @@
-# PRYMO DR Congo | Site V7 : Documentation API & scénarios de test
+# PRYMO DR Congo | Site V8 : logos clients, Mobile Money, documentation API & scénarios de test
 
 Site vitrine statique bilingue (FR/EN), responsive, à partir de la version V6 Mobile Money / Airtime.
 
-## Nouveautés V7
+## Nouveautés V7–V8
 
 - Ajout du menu « API & tests » et d'une zone de préparation des scénarios C2B/B2C dans la partie Mobile Money.
 - Lien direct vers la documentation Swagger PRYMO : https://tppdrc.myone4all.com/api/docs#
@@ -29,7 +29,7 @@ Pour réaliser les appels d'essai réels, le développeur doit :
 
 Consulter également `API-TEST-PLAN.md` pour la matrice de tests proposée.
 
-## Vérifications de la V7
+## Vérifications
 
 - Validation syntaxique JavaScript.
 - Contrôle des assets locaux, des liens de documentation présents et des ancres utilisées.
@@ -41,3 +41,10 @@ Consulter également `API-TEST-PLAN.md` pour la matrice de tests proposée.
 Déposer `index.html`, `assets/` et `CNAME` (si GitHub Pages est utilisé) sur l'hébergement de `prymodrc.com`. Ne pas copier uniquement `index.html`, les médias sont des fichiers locaux.
 
 Avant toute mise en production : vérifier les mentions réglementaires, autorisations des logos clients, coordonnées de contact, disponibilité des services et réception des formulaires de contact. Le formulaire utilise actuellement FormSubmit.
+
+## V8 (26 oct. 2026) — mise en ligne
+
+- Logos clients et opérateurs en fichiers image (`assets/`), image sociale `prymo-social.jpg`.
+- Déployé sur GitHub Pages depuis `main` (racine), domaine `prymodrc.com` (fichier `CNAME`), DNS chez Squarespace.
+- Correctif : débordement horizontal des cartes opérateurs sur mobile < 430 px.
+- Ajout de `robots.txt`, `sitemap.xml`, `404.html`, `.nojekyll`.
